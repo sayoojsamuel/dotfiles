@@ -5,6 +5,12 @@ set PATH $PATH /home/v4d3r/.rbenv/bin
 set PATH $PATH "$HOME/.rbenv/plugins/ruby-build/bin"
 set -gx PATH /home/v4d3r/go/bin $PATH
 alias rmf='rm -rf'
+alias r='ranger' 
+alias xcp='xclip -sel clipboard'
+
+function fcp    
+    xclip -sel clip < $argv
+end
 
 function download_package
     sudo apt install -y $argv --print-uris | grep "http://" | cut -d"'" -f 2 | sudo  wget -P /var/cache/apt/archives/ -c -i - ; sudo apt install $argv
@@ -17,3 +23,5 @@ begin
     end
 end
 
+# Regex subdirectories
+shopt -s globstar

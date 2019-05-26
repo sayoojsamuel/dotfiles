@@ -5,7 +5,7 @@
   geometry_hinting = True
   handle_size = 1
   suppress_multiple_term_dialog = True
-  title_inactive_bg_color = "#f57900"
+  title_inactive_bg_color = "#fcaf3e"
   title_transmit_bg_color = "#bf3f3f"
   window_state = fullscreen
 [keybindings]
@@ -34,7 +34,7 @@
 [profiles]
   [[default]]
     background_color = "#0c1115"
-    background_darkness = 0.76
+    background_darkness = 1.0
     background_type = transparent
     cursor_color = "#6c6c6c"
     font = Ubuntu Mono 10
@@ -62,7 +62,7 @@
     scroll_on_output = True
   [[Glacier]]
     background_color = "#0c1115"
-    background_darkness = 0.85
+    background_darkness = 0.95
     background_type = transparent
     cursor_color = "#6c6c6c"
     font = Ubuntu Mono 14

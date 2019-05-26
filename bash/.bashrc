@@ -133,3 +133,6 @@ export PATH=${PATH}:${GOPATH}/bin
 
 #Autojump
 . /home/v4d3r/.autojump/share/autojump/autojump.bash
+
+# Regex subdirectories
+shopt -s globstar
