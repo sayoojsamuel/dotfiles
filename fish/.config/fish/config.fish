@@ -23,5 +23,5 @@ begin
     end
 end
 
-# Regex subdirectories
-shopt -s globstar
+# Regex subdirectories, dosent work for fish
+# shopt -s globstar
