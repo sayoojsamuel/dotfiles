@@ -20,3 +20,5 @@ endtry
 " Sudo Save command W
 "
 "command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+"
+set foldcolumn=0

@@ -23,5 +23,7 @@ begin
     end
 end
 
+# Swap caps and escape
+setxkbmap -option caps:swapescape
 # Regex subdirectories, dosent work for fish
 # shopt -s globstar
