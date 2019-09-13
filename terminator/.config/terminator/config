@@ -12,7 +12,7 @@
 [layouts]
   [[default]]
     [[[child0]]]
-      fullscreen = True
+      fullscreen = False
       last_active_term = ad1616d2-fe2c-4977-9488-1614fc2d02e8
       last_active_window = True
       maximised = False
