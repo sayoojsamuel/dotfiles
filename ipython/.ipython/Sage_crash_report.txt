@@ -1,0 +1,713 @@
+***************************************************************************
+
+IPython post-mortem report
+
+{'commit_hash': u'b467d487e',
+ 'commit_source': 'installation',
+ 'default_encoding': 'UTF-8',
+ 'ipython_path': '/usr/lib/python2.7/dist-packages/IPython',
+ 'ipython_version': '5.5.0',
+ 'os_name': 'posix',
+ 'platform': 'Linux-4.15.0-58-generic-x86_64-with-Ubuntu-18.04-bionic',
+ 'sys_executable': '/usr/bin/python',
+ 'sys_platform': 'linux2',
+ 'sys_version': '2.7.15+ (default, Nov 27 2018, 23:36:35) \n[GCC 7.3.0]'}
+
+***************************************************************************
+
+
+
+***************************************************************************
+
+Crash traceback:
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+KeyboardInterrupt                           Python 2.7.15+: /usr/bin/python
+                                                   Sun Sep 15 13:47:59 2019
+A problem occurred executing Python code.  Here is the sequence of function
+calls leading up to the error, with the most recent (innermost) call last.
+/usr/share/sagemath/bin/sage-ipython in <module>()
+      1 #!/usr/bin/env python
+      2 # -*- coding: utf-8 -*-
+      3 """
+      4 Sage IPython startup script.
+      5 """
+      6 
+      7 from sage.repl.interpreter import SageTerminalApp
+      8 
+      9 app = SageTerminalApp.instance()
+---> 10 app.initialize()
+        global app.initialize = <bound method SageTerminalApp.initialize of <sage.repl.interpreter.SageTerminalApp object at 0x7f68a8324650>>
+     11 app.start()
+
+</home/v4d3r/.local/lib/python2.7/site-packages/decorator.pyc:decorator-gen-110> in initialize(self=<sage.repl.interpreter.SageTerminalApp object>, argv=None)
+
+/home/v4d3r/.local/lib/python2.7/site-packages/traitlets/config/application.pyc in catch_config_error(method=<function initialize>, app=<sage.repl.interpreter.SageTerminalApp object>, *args=(None,), **kwargs={})
+     72     TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR = False
+     73 else:
+     74     raise ValueError("Unsupported value for environment variable: 'TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR' is set to '%s' which is none of  {'0', '1', 'false', 'true', ''}."% _envvar )
+     75 
+     76 
+     77 @decorator
+     78 def catch_config_error(method, app, *args, **kwargs):
+     79     """Method decorator for catching invalid config (Trait/ArgumentErrors) during init.
+     80 
+     81     On a TraitError (generally caused by bad config), this will print the trait's
+     82     message, and exit the app.
+     83 
+     84     For use on init methods, to prevent invoking excepthook on invalid input.
+     85     """
+     86     try:
+---> 87         return method(app, *args, **kwargs)
+        method = <function initialize at 0x7f68a4ff1050>
+        app = <sage.repl.interpreter.SageTerminalApp object at 0x7f68a8324650>
+        args = (None,)
+        kwargs = {}
+     88     except (TraitError, ArgumentError) as e:
+     89         app.print_help()
+     90         app.log.fatal("Bad config encountered during initialization:")
+     91         app.log.fatal(str(e))
+     92         app.log.debug("Config at the time: %s", app.config)
+     93         app.exit(1)
+     94 
+     95 
+     96 class ApplicationError(Exception):
+     97     pass
+     98 
+     99 
+    100 class LevelFormatter(logging.Formatter):
+    101     """Formatter with additional `highlevel` record
+    102 
+
+/usr/lib/python2.7/dist-packages/IPython/terminal/ipapp.pyc in initialize(self=<sage.repl.interpreter.SageTerminalApp object>, argv=None)
+    301 
+    302         return super(TerminalIPythonApp, self).parse_command_line(argv)
+    303     
+    304     @catch_config_error
+    305     def initialize(self, argv=None):
+    306         """Do actions after construct, but before starting the app."""
+    307         super(TerminalIPythonApp, self).initialize(argv)
+    308         if self.subapp is not None:
+    309             # don't bother initializing further, starting subapp
+    310             return
+    311         # print self.extra_args
+    312         if self.extra_args and not self.something_to_run:
+    313             self.file_to_run = self.extra_args[0]
+    314         self.init_path()
+    315         # create the shell
+--> 316         self.init_shell()
+        self.init_shell = <bound method SageTerminalApp.init_shell of <sage.repl.interpreter.SageTerminalApp object at 0x7f68a8324650>>
+    317         # and draw the banner
+    318         self.init_banner()
+    319         # Now a variety of things that happen after the banner is printed.
+    320         self.init_gui_pylab()
+    321         self.init_extensions()
+    322         self.init_code()
+    323 
+    324     def init_shell(self):
+    325         """initialize the InteractiveShell instance"""
+    326         # Create an InteractiveShell instance.
+    327         # shell.display_banner should always be False for the terminal
+    328         # based app, because we call shell.show_banner() by hand below
+    329         # so the banner shows *before* all extension loading stuff.
+    330         self.shell = self.interactive_shell_class.instance(parent=self,
+    331                         profile_dir=self.profile_dir,
+
+/usr/lib/python2.7/dist-packages/sage/repl/interpreter.pyc in init_shell(self=<sage.repl.interpreter.SageTerminalApp object>)
+    747         self.shell.has_sage_extensions = SAGE_EXTENSION in self.extensions
+    748 
+    749         # Load the %lprun extension if available
+    750         try:
+    751             import line_profiler
+    752         except ImportError:
+    753             pass
+    754         else:
+    755             self.extensions.append('line_profiler')
+    756 
+    757         if self.shell.has_sage_extensions:
+    758             self.extensions.remove(SAGE_EXTENSION)
+    759 
+    760             # load sage extension here to get a crash if
+    761             # something is wrong with the sage library
+--> 762             self.shell.extension_manager.load_extension(SAGE_EXTENSION)
+        self.shell.extension_manager.load_extension = <bound method ExtensionManager.load_extension of <IPython.core.extensions.ExtensionManager object at 0x7f68a8297490>>
+        global SAGE_EXTENSION = 'sage'
+    763 
+    764 
+
+/usr/lib/python2.7/dist-packages/IPython/core/extensions.pyc in load_extension(self=<IPython.core.extensions.ExtensionManager object>, module_str='sage')
+     70 
+     71         Returns the string "already loaded" if the extension is already loaded,
+     72         "no load function" if the module doesn't have a load_ipython_extension
+     73         function, or None if it succeeded.
+     74         """
+     75         if module_str in self.loaded:
+     76             return "already loaded"
+     77         
+     78         from IPython.utils.syspathcontext import prepended_to_syspath
+     79         
+     80         with self.shell.builtin_trap:
+     81             if module_str not in sys.modules:
+     82                 with prepended_to_syspath(self.ipython_extension_dir):
+     83                     __import__(module_str)
+     84             mod = sys.modules[module_str]
+---> 85             if self._call_load_ipython_extension(mod):
+        self._call_load_ipython_extension = <bound method ExtensionManager._call_load_ipython_extension of <IPython.core.extensions.ExtensionManager object at 0x7f68a8297490>>
+        mod = <module 'sage' from '/usr/lib/python2.7/dist-packages/sage/__init__.pyc'>
+     86                 self.loaded.add(module_str)
+     87             else:
+     88                 return "no load function"
+     89 
+     90     def unload_extension(self, module_str):
+     91         """Unload an IPython extension by its module name.
+     92 
+     93         This function looks up the extension's name in ``sys.modules`` and
+     94         simply calls ``mod.unload_ipython_extension(self)``.
+     95         
+     96         Returns the string "no unload function" if the extension doesn't define
+     97         a function to unload itself, "not loaded" if the extension isn't loaded,
+     98         otherwise None.
+     99         """
+    100         if module_str not in self.loaded:
+
+/usr/lib/python2.7/dist-packages/IPython/core/extensions.pyc in _call_load_ipython_extension(self=<IPython.core.extensions.ExtensionManager object>, mod=<module 'sage' from '/usr/lib/python2.7/dist-packages/sage/__init__.pyc'>)
+    117         """
+    118         from IPython.utils.syspathcontext import prepended_to_syspath
+    119 
+    120         if (module_str in self.loaded) and (module_str in sys.modules):
+    121             self.unload_extension(module_str)
+    122             mod = sys.modules[module_str]
+    123             with prepended_to_syspath(self.ipython_extension_dir):
+    124                 reload(mod)
+    125             if self._call_load_ipython_extension(mod):
+    126                 self.loaded.add(module_str)
+    127         else:
+    128             self.load_extension(module_str)
+    129 
+    130     def _call_load_ipython_extension(self, mod):
+    131         if hasattr(mod, 'load_ipython_extension'):
+--> 132             mod.load_ipython_extension(self.shell)
+        mod.load_ipython_extension = <function load_ipython_extension at 0x7f68a9dabaa0>
+        self.shell = <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7f68a501b050>
+    133             return True
+    134 
+    135     def _call_unload_ipython_extension(self, mod):
+    136         if hasattr(mod, 'unload_ipython_extension'):
+    137             mod.unload_ipython_extension(self.shell)
+    138             return True
+    139 
+    140     def install_extension(self, url, filename=None):
+    141         """Download and install an IPython extension. 
+    142 
+    143         If filename is given, the file will be so named (inside the extension
+    144         directory). Otherwise, the name from the URL will be used. The file must
+    145         have a .py or .zip extension; otherwise, a ValueError will be raised.
+    146 
+    147         Returns the full path to the installed file.
+
+/usr/lib/python2.7/dist-packages/sage/__init__.pyc in load_ipython_extension(*args=(<sage.repl.interpreter.SageTerminalInteractiveShell object>,))
+      1 __all__ = ['all']
+      2 
+      3 # Make sure that the correct zlib library is loaded. This is needed
+      4 # to prevent the system zlib to be loaded instead of the Sage one.
+      5 # See https://trac.sagemath.org/ticket/23122
+      6 import zlib
+      7 
+      8 # IPython calls this when starting up
+      9 def load_ipython_extension(*args):
+     10     import sage.repl.ipython_extension
+---> 11     sage.repl.ipython_extension.load_ipython_extension(*args)
+        sage.repl.ipython_extension.load_ipython_extension = <function load_ipython_extension at 0x7f689fc340c8>
+        args = (<sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7f68a501b050>,)
+     12 
+     13 
+     14 # Monkey-patch inspect.isfunction() to support Cython functions.
+     15 def isfunction(obj):
+     16     """
+     17     Check whether something is a function.
+     18 
+     19     We assume that anything which has a genuine ``__code__``
+     20     attribute (not using ``__getattr__`` overrides) is a function.
+     21     This is meant to support Cython functions.
+     22 
+     23     EXAMPLES::
+     24 
+     25         sage: from inspect import isfunction
+     26         sage: def f(): pass
+     27         sage: isfunction(f)
+     28         True
+     29         sage: isfunction(lambda x:x)
+     30         True
+     31         sage: from sage.categories.coercion_methods import _mul_parent
+
+/usr/lib/python2.7/dist-packages/sage/repl/ipython_extension.pyc in wrapper(*args=(<sage.repl.interpreter.SageTerminalInteractiveShell object>,), **kwargs={})
+    546         ....:     if work:
+    547         ....:         return 'foo worked'
+    548         ....:     raise RuntimeError("foo didn't work")
+    549         sage: foo(False)
+    550         Traceback (most recent call last):
+    551         ...
+    552         RuntimeError: foo didn't work
+    553         sage: foo(True)
+    554         'foo worked'
+    555         sage: foo(False)
+    556         sage: foo(True)
+    557     """
+    558     @wraps(func)
+    559     def wrapper(*args, **kwargs):
+    560         if not wrapper.has_run:
+--> 561             result = func(*args, **kwargs)
+        result = undefined
+        global func = undefined
+        args = (<sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7f68a501b050>,)
+        kwargs = {}
+    562             wrapper.has_run = True
+    563             return result
+    564     wrapper.has_run = False
+    565     return wrapper
+    566 
+    567 
+    568 @run_once
+    569 def load_ipython_extension(ip):
+    570     """
+    571     Load the extension in IPython.
+    572     """
+    573     # this modifies ip
+    574     SageCustomizations(shell=ip)
+
+/usr/lib/python2.7/dist-packages/sage/repl/ipython_extension.pyc in load_ipython_extension(ip=<sage.repl.interpreter.SageTerminalInteractiveShell object>)
+    559     def wrapper(*args, **kwargs):
+    560         if not wrapper.has_run:
+    561             result = func(*args, **kwargs)
+    562             wrapper.has_run = True
+    563             return result
+    564     wrapper.has_run = False
+    565     return wrapper
+    566 
+    567 
+    568 @run_once
+    569 def load_ipython_extension(ip):
+    570     """
+    571     Load the extension in IPython.
+    572     """
+    573     # this modifies ip
+--> 574     SageCustomizations(shell=ip)
+        global SageCustomizations = <class 'sage.repl.ipython_extension.SageCustomizations'>
+        global shell = undefined
+        ip = <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7f68a501b050>
+
+/usr/lib/python2.7/dist-packages/sage/repl/ipython_extension.pyc in __init__(self=<sage.repl.ipython_extension.SageCustomizations object>, shell=<sage.repl.interpreter.SageTerminalInteractiveShell object>)
+    417     def __init__(self, shell=None):
+    418         """
+    419         Initialize the Sage plugin.
+    420         """
+    421         self.shell = shell
+    422 
+    423         self.auto_magics = SageMagics(shell)
+    424         self.shell.register_magics(self.auto_magics)
+    425 
+    426         import sage.misc.edit_module as edit_module
+    427         self.shell.set_hook('editor', edit_module.edit_devel)
+    428 
+    429         self.init_inspector()
+    430         self.init_line_transforms()
+    431 
+--> 432         import sage.all # until sage's import hell is fixed
+        sage.all = undefined
+    433 
+    434         self.shell.verbose_quit = True
+    435         self.set_quit_hook()
+    436 
+    437         self.register_interface_magics()
+    438 
+    439         if SAGE_IMPORTALL == 'yes':
+    440             self.init_environment()
+    441 
+    442     def register_interface_magics(self):
+    443         """
+    444         Register magics for each of the Sage interfaces
+    445         """
+    446         from sage.repl.interface_magic import InterfaceMagic
+    447         InterfaceMagic.register_all(self.shell)
+
+/usr/lib/python2.7/dist-packages/sage/all.py in <module>()
+     83 
+     84 from time                import sleep
+     85 
+     86 import sage.misc.lazy_import
+     87 from sage.misc.all       import *         # takes a while
+     88 from sage.typeset.all    import *
+     89 from sage.repl.all       import *
+     90 
+     91 from sage.misc.sh import sh
+     92 
+     93 from sage.libs.all       import *
+     94 from sage.data_structures.all import *
+     95 from sage.doctest.all    import *
+     96 
+     97 from sage.structure.all  import *
+---> 98 from sage.rings.all      import *
+        global sage.rings.all = undefined
+     99 from sage.arith.all      import *
+    100 from sage.matrix.all     import *
+    101 
+    102 from sage.symbolic.all   import *
+    103 from sage.modules.all    import *
+    104 from sage.monoids.all    import *
+    105 from sage.algebras.all   import *
+    106 from sage.modular.all    import *
+    107 from sage.sat.all        import *
+    108 from sage.schemes.all    import *
+    109 from sage.graphs.all     import *
+    110 from sage.groups.all     import *
+    111 from sage.databases.all  import *
+    112 from sage.categories.all import *
+    113 from sage.sets.all       import *
+
+/usr/lib/python2.7/dist-packages/sage/rings/all.pyc in <module>()
+     48 Integers = IntegerModRing
+     49 
+     50 # Finite fields
+     51 from .finite_rings.all import *
+     52 
+     53 # Number field
+     54 from .number_field.all import *
+     55 
+     56 # Function field
+     57 from .function_field.all import *
+     58 
+     59 # Finite residue fields
+     60 from .finite_rings.residue_field import ResidueField
+     61 
+     62 # p-adic field
+---> 63 from .padics.all import *
+        global padics.all = undefined
+     64 from .padics.padic_printing import _printer_defaults as padic_printing
+     65 
+     66 # Semirings
+     67 from .semirings.all import *
+     68 
+     69 # Real numbers
+     70 from .real_mpfr import (RealField, RR,
+     71                        create_RealNumber as RealNumber)   # this is used by the preparser to wrap real literals -- very important.
+     72 Reals = RealField
+     73 
+     74 from .real_double import RealDoubleField, RDF, RealDoubleElement
+     75 
+     76 from .real_lazy import RealLazyField, RLF, ComplexLazyField, CLF
+     77 
+     78 from sage.rings.real_arb import RealBallField, RBF
+
+/usr/lib/python2.7/dist-packages/sage/rings/padics/all.py in <module>()
+      1 from __future__ import absolute_import
+      2 from .generic_nodes import is_pAdicField, is_pAdicRing
+----> 3 from .factory import Zp, Zq, Zp as pAdicRing, ZpCR, ZpCA, ZpFM, ZpFP, ZqCR, ZqCA, ZqFM, ZqFP #, ZpL, ZqL
+        global factory = undefined
+        global Zp = undefined
+        global Zq = undefined
+        global pAdicRing = undefined
+        global ZpCR = undefined
+        global ZpCA = undefined
+        global ZpFM = undefined
+        global ZpFP = undefined
+        global ZqCR = undefined
+        global ZqCA = undefined
+        global ZqFM = undefined
+        global ZqFP = undefined
+      4 from .factory import Qp, Qq, Qp as pAdicField, QpCR, QpFP, QqCR, QqFP #, QpL, QqL
+      5 from .factory import pAdicExtension
+      6 from .padic_generic import local_print_mode
+      7 from .pow_computer import PowComputer
+      8 from .pow_computer_ext import PowComputer_ext_maker
+      9 from .discrete_value_group import DiscreteValueGroup
+
+/usr/lib/python2.7/dist-packages/sage/rings/padics/factory.py in <module>()
+     29 from sage.structure.element import is_Element
+     30 from .padic_base_leaves import (pAdicRingCappedRelative,
+     31                                 pAdicRingCappedAbsolute,
+     32                                 pAdicRingFixedMod,
+     33                                 pAdicRingFloatingPoint,
+     34                                 pAdicFieldCappedRelative,
+     35                                 pAdicFieldFloatingPoint)
+     36 from . import padic_printing
+     37 
+     38 ######################################################
+     39 # ext_table --
+     40 # This dictionary controls what class is created by the extension
+     41 # factory when it finds a given class in the ground ring of the tower.
+     42 ######################################################
+     43 
+---> 44 from .padic_extension_leaves import *
+        global padic_extension_leaves = undefined
+     45 from functools import reduce
+     46 #This imports all of the classes used in the ext_table below.
+     47 
+     48 ext_table = {}
+     49 ext_table['e', pAdicFieldCappedRelative] = EisensteinExtensionFieldCappedRelative
+     50 #ext_table['e', pAdicFieldLazy] = EisensteinExtensionFieldLazy
+     51 ext_table['e', pAdicRingCappedAbsolute] = EisensteinExtensionRingCappedAbsolute
+     52 ext_table['e', pAdicRingCappedRelative] = EisensteinExtensionRingCappedRelative
+     53 ext_table['e', pAdicRingFixedMod] = EisensteinExtensionRingFixedMod
+     54 #ext_table['e', pAdicRingFloatingPoint] = EisensteinExtensionRingFloatingPoint
+     55 #ext_table['e', pAdicFieldFloatingPoint] = EisensteinExtensionFieldFloatingPoint
+     56 #ext_table['e', pAdicRingLazy] = EisensteinExtensionRingLazy
+     57 #ext_table['p', pAdicFieldCappedRelative] = pAdicGeneralExtensionFieldCappedRelative
+     58 #ext_table['p', pAdicFieldLazy] = pAdicGeneralExtensionFieldLazy
+     59 #ext_table['p', pAdicRingCappedAbsolute] = pAdicGeneralExtensionRingCappedAbsolute
+
+/usr/lib/python2.7/dist-packages/sage/rings/padics/padic_extension_leaves.py in <module>()
+     38                           pAdicFixedModRingGeneric, \
+     39                           pAdicFloatingPointRingGeneric, \
+     40                           pAdicFloatingPointFieldGeneric
+     41 
+     42 #from unramified_extension_absolute_element import UnramifiedExtensionAbsoluteElement
+     43 #from unramified_extension_capped_relative_element import UnramifiedExtensionCappedRelativeElement
+     44 #from unramified_extension_lazy_element import UnramifiedExtensionLazyElement
+     45 #from eisenstein_extension_absolute_element import EisensteinExtensionAbsoluteElement
+     46 #from eisenstein_extension_capped_relative_element import EisensteinExtensionCappedRelativeElement
+     47 #from eisenstein_extension_lazy_element import EisensteinExtensionLazyElement
+     48 #from padic_general_extension_absolute_element import pAdicGeneralExtensionAbsoluteElement
+     49 #from padic_general_extension_capped_relative_element import pAdicGeneralExtensionCappedRelativeElement
+     50 #from padic_general_extension_lazy_element import pAdicGeneralExtensionLazyElement
+     51 
+     52 from .padic_ZZ_pX_FM_element import pAdicZZpXFMElement
+---> 53 from .padic_ZZ_pX_CR_element import pAdicZZpXCRElement
+        global padic_ZZ_pX_CR_element = undefined
+        global pAdicZZpXCRElement = undefined
+     54 from .padic_ZZ_pX_CA_element import pAdicZZpXCAElement
+     55 from .qadic_flint_CR import qAdicCappedRelativeElement
+     56 from .qadic_flint_CA import qAdicCappedAbsoluteElement
+     57 from .qadic_flint_FM import qAdicFixedModElement
+     58 from .qadic_flint_FP import qAdicFloatingPointElement
+     59 
+     60 def _make_integral_poly(exact_modulus, p, prec):
+     61     """
+     62     Convert a defining polynomial into one with integral coefficients.
+     63 
+     64     INPUT:
+     65 
+     66     - ``exact_modulus`` -- a univariate polynomial
+     67 
+     68     - ``p`` -- a prime
+
+sage/rings/padics/padic_ZZ_pX_CR_element.pyx in init sage.rings.padics.padic_ZZ_pX_CR_element()
+
+/usr/lib/python2.7/dist-packages/sage/misc/superseded.pyc in deprecated_function_alias(trac_number=14825, func=<method 'expansion' of 'sage.rings.padics.padic_ZZ_pX_CR_element.pAdicZZpXCRElement' objects>)
+    491 
+    492     :trac:`11585`::
+    493 
+    494         sage: def a(): pass
+    495         sage: b = deprecated_function_alias(13109, a)
+    496         sage: b()
+    497         doctest:...: DeprecationWarning: b is deprecated. Please use a instead.
+    498         See http://trac.sagemath.org/13109 for details.
+    499 
+    500     AUTHORS:
+    501 
+    502      - Florent Hivert (2009-11-23), with the help of Mike Hansen.
+    503      - Luca De Feo (2011-07-11), printing the full module path when different from old path
+    504     """
+    505     _check_trac_number(trac_number)
+--> 506     frame1 = inspect.getouterframes(inspect.currentframe())[1][0]
+        frame1 = undefined
+        global inspect.getouterframes = <function getouterframes at 0x7f68a8326cf8>
+        global inspect.currentframe = <built-in function _getframe>
+    507     module_name = inspect.getmodulename(frame1.f_code.co_filename)
+    508     if module_name is None:
+    509         module_name = '__main__'
+    510     return DeprecatedFunctionAlias(trac_number, func, module_name)
+
+/usr/lib/python2.7/inspect.pyc in getouterframes(frame=<frame object>, context=1)
+   1032 
+   1033     return Traceback(filename, lineno, frame.f_code.co_name, lines, index)
+   1034 
+   1035 def getlineno(frame):
+   1036     """Get the line number from a frame object, allowing for optimization."""
+   1037     # FrameType.f_lineno is now a descriptor that grovels co_lnotab
+   1038     return frame.f_lineno
+   1039 
+   1040 def getouterframes(frame, context=1):
+   1041     """Get a list of records for a frame and all higher (calling) frames.
+   1042 
+   1043     Each record contains a frame object, filename, line number, function
+   1044     name, a list of lines of context, and index within the context."""
+   1045     framelist = []
+   1046     while frame:
+-> 1047         framelist.append((frame,) + getframeinfo(frame, context))
+        framelist.append = <built-in method append of list object at 0x7f671c72cea8>
+        frame = <frame object at 0x7f68a5000b30>
+        global getframeinfo = <function getframeinfo at 0x7f68a8326848>
+        context = 1
+   1048         frame = frame.f_back
+   1049     return framelist
+   1050 
+   1051 def getinnerframes(tb, context=1):
+   1052     """Get a list of records for a traceback's frame and all lower frames.
+   1053 
+   1054     Each record contains a frame object, filename, line number, function
+   1055     name, a list of lines of context, and index within the context."""
+   1056     framelist = []
+   1057     while tb:
+   1058         framelist.append((tb.tb_frame,) + getframeinfo(tb, context))
+   1059         tb = tb.tb_next
+   1060     return framelist
+   1061 
+   1062 if hasattr(sys, '_getframe'):
+
+/usr/lib/python2.7/inspect.pyc in getframeinfo(frame=<frame object>, context=1)
+   1007     the source code, and the index of the current line within that list.
+   1008     The optional second argument specifies the number of lines of context
+   1009     to return, which are centered around the current line."""
+   1010     if istraceback(frame):
+   1011         lineno = frame.tb_lineno
+   1012         frame = frame.tb_frame
+   1013     else:
+   1014         lineno = frame.f_lineno
+   1015     if not isframe(frame):
+   1016         raise TypeError('{!r} is not a frame or traceback object'.format(frame))
+   1017 
+   1018     filename = getsourcefile(frame) or getfile(frame)
+   1019     if context > 0:
+   1020         start = lineno - 1 - context//2
+   1021         try:
+-> 1022             lines, lnum = findsource(frame)
+        lines = undefined
+        lnum = undefined
+        global findsource = <function findsource at 0x7f68a8336230>
+        frame = <frame object at 0x7f68a5000b30>
+   1023         except IOError:
+   1024             lines = index = None
+   1025         else:
+   1026             start = max(start, 1)
+   1027             start = max(0, min(start, len(lines) - context))
+   1028             lines = lines[start:start+context]
+   1029             index = lineno - 1 - start
+   1030     else:
+   1031         lines = index = None
+   1032 
+   1033     return Traceback(filename, lineno, frame.f_code.co_name, lines, index)
+   1034 
+   1035 def getlineno(frame):
+   1036     """Get the line number from a frame object, allowing for optimization."""
+   1037     # FrameType.f_lineno is now a descriptor that grovels co_lnotab
+
+/usr/lib/python2.7/inspect.pyc in findsource(object=<frame object>)
+    516 
+    517 def findsource(object):
+    518     """Return the entire source file and starting line number for an object.
+    519 
+    520     The argument may be a module, class, method, function, traceback, frame,
+    521     or code object.  The source code is returned as a list of all the lines
+    522     in the file and the line number indexes a line in that list.  An IOError
+    523     is raised if the source code cannot be retrieved."""
+    524 
+    525     file = getfile(object)
+    526     sourcefile = getsourcefile(object)
+    527     if not sourcefile and file[:1] + file[-1:] != '<>':
+    528         raise IOError('source code not available')
+    529     file = sourcefile if sourcefile else file
+    530 
+--> 531     module = getmodule(object, file)
+        module = undefined
+        global getmodule = <function getmodule at 0x7f68a83361b8>
+        object = <frame object at 0x7f68a5000b30>
+        file = '</home/v4d3r/.local/lib/python2.7/site-packages/decorator.pyc:decorator-gen-110>'
+    532     if module:
+    533         lines = linecache.getlines(file, module.__dict__)
+    534     else:
+    535         lines = linecache.getlines(file)
+    536     if not lines:
+    537         raise IOError('could not get source code')
+    538 
+    539     if ismodule(object):
+    540         return lines, 0
+    541 
+    542     if isclass(object):
+    543         name = object.__name__
+    544         pat = re.compile(r'^(\s*)class\s*' + name + r'\b')
+    545         # make some effort to find the best matching class definition:
+    546         # use the one with the least indentation, which is the one
+
+/usr/lib/python2.7/inspect.pyc in getmodule(object=<frame object>, _filename='</home/v4d3r/.local/lib/python2.7/site-packages/decorator.pyc:decorator-gen-110>')
+    475     if hasattr(object, '__module__'):
+    476         return sys.modules.get(object.__module__)
+    477     # Try the filename to modulename cache
+    478     if _filename is not None and _filename in modulesbyfile:
+    479         return sys.modules.get(modulesbyfile[_filename])
+    480     # Try the cache again with the absolute file name
+    481     try:
+    482         file = getabsfile(object, _filename)
+    483     except TypeError:
+    484         return None
+    485     if file in modulesbyfile:
+    486         return sys.modules.get(modulesbyfile[file])
+    487     # Update the filename to module name cache and check yet again
+    488     # Copy sys.modules in order to cope with changes while iterating
+    489     for modname, module in sys.modules.items():
+--> 490         if ismodule(module) and hasattr(module, '__file__'):
+        global ismodule = <function ismodule at 0x7f68a9d7b410>
+        module = <module 'sage.misc.function_mangling' from '/usr/lib/python2.7/dist-packages/sage/misc/function_mangling.x86_64-linux-gnu.so'>
+        global hasattr = undefined
+    491             f = module.__file__
+    492             if f == _filesbymodname.get(modname, None):
+    493                 # Have already mapped this module, so skip it
+    494                 continue
+    495             _filesbymodname[modname] = f
+    496             f = getabsfile(module)
+    497             # Always map to the name the module knows itself by
+    498             modulesbyfile[f] = modulesbyfile[
+    499                 os.path.realpath(f)] = module.__name__
+    500     if file in modulesbyfile:
+    501         return sys.modules.get(modulesbyfile[file])
+    502     # Check the main module
+    503     main = sys.modules['__main__']
+    504     if not hasattr(object, '__name__'):
+    505         return None
+
+/usr/lib/python2.7/inspect.pyc in ismodule(object=<module 'sage.misc.function_mangling' from '/usr...sage/misc/function_mangling.x86_64-linux-gnu.so'>)
+     42 from collections import namedtuple
+     43 
+     44 # These constants are from Include/code.h.
+     45 CO_OPTIMIZED, CO_NEWLOCALS, CO_VARARGS, CO_VARKEYWORDS = 0x1, 0x2, 0x4, 0x8
+     46 CO_NESTED, CO_GENERATOR, CO_NOFREE = 0x10, 0x20, 0x40
+     47 # See Include/object.h
+     48 TPFLAGS_IS_ABSTRACT = 1 << 20
+     49 
+     50 # ----------------------------------------------------------- type-checking
+     51 def ismodule(object):
+     52     """Return true if the object is a module.
+     53 
+     54     Module objects provide these attributes:
+     55         __doc__         documentation string
+     56         __file__        filename (missing for built-in modules)"""
+---> 57     return isinstance(object, types.ModuleType)
+        global isinstance = undefined
+        object = <module 'sage.misc.function_mangling' from '/usr/lib/python2.7/dist-packages/sage/misc/function_mangling.x86_64-linux-gnu.so'>
+        global types.ModuleType = <type 'module'>
+     58 
+     59 def isclass(object):
+     60     """Return true if the object is a class.
+     61 
+     62     Class objects provide these attributes:
+     63         __doc__         documentation string
+     64         __module__      name of module in which this class was defined"""
+     65     return isinstance(object, (type, types.ClassType))
+     66 
+     67 def ismethod(object):
+     68     """Return true if the object is an instance method.
+     69 
+     70     Instance method objects provide these attributes:
+     71         __doc__         documentation string
+     72         __name__        name with which this method was defined
+
+src/cysignals/signals.pyx in cysignals.signals.python_check_interrupt (build/pari/src/cysignals/signals.c:2724)()
+
+src/cysignals/signals.pyx in cysignals.signals.sig_raise_exception (build/pari/src/cysignals/signals.c:1331)()
+
+KeyboardInterrupt: 
+
+***************************************************************************
+
+History of session input:
+*** Last line of input (may not be in above history):
