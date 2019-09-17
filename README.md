@@ -30,3 +30,18 @@ To uninstall specific apps, do a `stow -D APP` in the `dotfiles` directory. To i
 ## Further Reading
 stow --[no-folding](https://news.ycombinator.com/item?id=7927930)
 Gnu manual [Tree folding](https://www.gnu.org/software/stow/manual/stow.html#Tree-folding)
+
+## Adding configs to dotfiles
+1. Create a folder for Tool
+```bash
+cd ~/dotfiles; mkdir -p ipython;
+```
+2. Move the config file to the new directory, following the correct path
+```bash
+mv ./config/ipython ~dotfiles/ipython/.config/ipython
+```
+3. Install using stow (to create symbolic link)
+```bash
+cd ~/dotfiles
+stow ipython
+```
