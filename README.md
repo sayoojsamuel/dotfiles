@@ -45,3 +45,10 @@ mv ./config/ipython ~dotfiles/ipython/.config/ipython
 cd ~/dotfiles
 stow ipython
 ```
+4. [Extra: Overwrite] User `--adopt` to overwrite an existing config
+```bash
+cd ~/dotfiles
+stow --adopt sage
+```
+Overwrite may sound cool, but I personally don't like it. As expected, it just links the old files. New files are untracked as the folder is not properly stowed.
+

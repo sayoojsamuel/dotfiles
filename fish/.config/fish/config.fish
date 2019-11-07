@@ -4,6 +4,7 @@ set PATH $PATH /home/v4d3r/Development/flutter/bin
 set PATH $PATH /home/v4d3r/.rbenv/bin
 set PATH $PATH "$HOME/.rbenv/plugins/ruby-build/bin"
 set -gx PATH /home/v4d3r/go/bin $PATH
+set -gx PATH /home/v4d3r/.local/bin $PATH
 alias rmf='rm -rf'
 alias r='ranger' 
 alias xcp='xclip -sel clipboard'
@@ -23,7 +24,5 @@ begin
     end
 end
 
-# Swap caps and escape
-setxkbmap -option caps:swapescape
 # Regex subdirectories, dosent work for fish
 # shopt -s globstar

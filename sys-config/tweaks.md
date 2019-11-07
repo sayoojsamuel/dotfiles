@@ -7,7 +7,7 @@
 
 # caps:swapescape
     Swap the caps with escape, for fast keyboard customisation
-    `setxkbmap -option caps:swapescape`
+    echo `setxkbmap -option caps:swapescape` > .xinitrc
 ### Stack-Exchange
 https://askubuntu.com/a/365701
 
