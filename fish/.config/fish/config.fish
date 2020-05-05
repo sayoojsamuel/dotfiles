@@ -26,3 +26,10 @@ end
 
 # Regex subdirectories, dosent work for fish
 # shopt -s globstar
+
+# emacs server
+function emacss
+    #emacsclient "$@" 2>/dev/null || /usr/bin/emacs "$@"
+    emacsclient -n "$1" 2>/dev/null || /usr/bin/emacs "$1"
+end
+alias f='emacss'

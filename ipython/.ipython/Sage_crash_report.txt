@@ -1,0 +1,436 @@
+***************************************************************************
+
+IPython post-mortem report
+
+{'commit_hash': '<not found>',
+ 'commit_source': '(none found)',
+ 'default_encoding': 'utf-8',
+ 'ipython_path': '/usr/lib/python3.8/site-packages/IPython',
+ 'ipython_version': '7.12.0',
+ 'os_name': 'posix',
+ 'platform': 'Linux-5.5.6-arch1-1-x86_64-with-glibc2.2.5',
+ 'sys_executable': '/usr/bin/python3',
+ 'sys_platform': 'linux',
+ 'sys_version': '3.8.1 (default, Jan 22 2020, 06:38:00) \n[GCC 9.2.0]'}
+
+***************************************************************************
+
+
+
+***************************************************************************
+
+Crash traceback:
+
+---------------------------------------------------------------------------
+---------------------------------------------------------------------------
+TypeError                                    Python 3.8.1: /usr/bin/python3
+                                                   Tue Apr  7 02:03:03 2020
+A problem occurred executing Python code.  Here is the sequence of function
+calls leading up to the error, with the most recent (innermost) call last.
+/usr/bin/sage-ipython in <module>
+      1 #!/usr/bin/env sage-python
+      2 # -*- coding: utf-8 -*-
+      3 """
+      4 Sage IPython startup script.
+      5 """
+      6 
+      7 # Display startup banner. Do this before anything else to give the user
+      8 # early feedback that Sage is starting.
+      9 from sage.misc.banner import banner
+     10 banner()
+     11 
+     12 from sage.repl.interpreter import SageTerminalApp
+     13 
+     14 app = SageTerminalApp.instance()
+---> 15 app.initialize()
+        global app.initialize = <bound method TerminalIPythonApp.initialize of <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>>
+     16 app.start()
+
+</usr/lib/python3.8/site-packages/decorator.py:decorator-gen-113> in initialize(self=<sage.repl.interpreter.SageTerminalApp object>, argv=None)
+
+/usr/lib/python3.8/site-packages/traitlets/config/application.py in catch_config_error(method=<function TerminalIPythonApp.initialize>, app=<sage.repl.interpreter.SageTerminalApp object>, *args=(None,), **kwargs={})
+     72     TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR = False
+     73 else:
+     74     raise ValueError("Unsupported value for environment variable: 'TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR' is set to '%s' which is none of  {'0', '1', 'false', 'true', ''}."% _envvar )
+     75 
+     76 
+     77 @decorator
+     78 def catch_config_error(method, app, *args, **kwargs):
+     79     """Method decorator for catching invalid config (Trait/ArgumentErrors) during init.
+     80 
+     81     On a TraitError (generally caused by bad config), this will print the trait's
+     82     message, and exit the app.
+     83 
+     84     For use on init methods, to prevent invoking excepthook on invalid input.
+     85     """
+     86     try:
+---> 87         return method(app, *args, **kwargs)
+        method = <function TerminalIPythonApp.initialize at 0x7fc22aca8af0>
+        app = <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>
+        args = (None,)
+        kwargs = {}
+     88     except (TraitError, ArgumentError) as e:
+     89         app.print_help()
+     90         app.log.fatal("Bad config encountered during initialization:")
+     91         app.log.fatal(str(e))
+     92         app.log.debug("Config at the time: %s", app.config)
+     93         app.exit(1)
+     94 
+     95 
+     96 class ApplicationError(Exception):
+     97     pass
+     98 
+     99 
+    100 class LevelFormatter(logging.Formatter):
+    101     """Formatter with additional `highlevel` record
+    102 
+
+/usr/lib/python3.8/site-packages/IPython/terminal/ipapp.py in initialize(self=<sage.repl.interpreter.SageTerminalApp object>, argv=None)
+    302 
+    303         return super(TerminalIPythonApp, self).parse_command_line(argv)
+    304     
+    305     @catch_config_error
+    306     def initialize(self, argv=None):
+    307         """Do actions after construct, but before starting the app."""
+    308         super(TerminalIPythonApp, self).initialize(argv)
+    309         if self.subapp is not None:
+    310             # don't bother initializing further, starting subapp
+    311             return
+    312         # print self.extra_args
+    313         if self.extra_args and not self.something_to_run:
+    314             self.file_to_run = self.extra_args[0]
+    315         self.init_path()
+    316         # create the shell
+--> 317         self.init_shell()
+        self.init_shell = <bound method SageTerminalApp.init_shell of <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>>
+    318         # and draw the banner
+    319         self.init_banner()
+    320         # Now a variety of things that happen after the banner is printed.
+    321         self.init_gui_pylab()
+    322         self.init_extensions()
+    323         self.init_code()
+    324 
+    325     def init_shell(self):
+    326         """initialize the InteractiveShell instance"""
+    327         # Create an InteractiveShell instance.
+    328         # shell.display_banner should always be False for the terminal
+    329         # based app, because we call shell.show_banner() by hand below
+    330         # so the banner shows *before* all extension loading stuff.
+    331         self.shell = self.interactive_shell_class.instance(parent=self,
+    332                         profile_dir=self.profile_dir,
+
+/usr/lib/python3.8/site-packages/sage/repl/interpreter.py in init_shell(self=<sage.repl.interpreter.SageTerminalApp object>)
+    706         Initialize the :class:`SageInteractiveShell` instance.
+    707 
+    708         .. note::
+    709 
+    710             This code is based on
+    711             :meth:`TerminalIPythonApp.init_shell`.
+    712 
+    713         EXAMPLES::
+    714 
+    715             sage: from sage.repl.interpreter import SageTerminalApp
+    716             sage: app = SageTerminalApp.instance()
+    717             sage: app.shell
+    718             <sage.repl.interpreter.SageTestShell object at 0x...>
+    719         """
+    720         # Shell initialization
+--> 721         self.shell = self.shell_class.instance(
+        self.shell = None
+        self.shell_class.instance = <bound method SingletonConfigurable.instance of <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>>
+        global parent = undefined
+        self = <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>
+        global config = undefined
+        self.config = {'TerminalIPythonApp': {'display_banner': False, 'verbose_crash': True, 'test_shell': False, 'shell_class': <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>}, 'InteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'TerminalInteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'InteractiveShellApp': {'extensions': ['sage']}, 'SageTerminalApp': {'force_interact': True}}
+        global profile_dir = undefined
+        self.profile_dir = <IPython.core.profiledir.ProfileDir object at 0x7fc22ad0ef70>
+        global ipython_dir = undefined
+        self.ipython_dir = '/home/v4d3r/.ipython'
+    722             parent=self,
+    723             config=self.config,
+    724             profile_dir=self.profile_dir,
+    725             ipython_dir=self.ipython_dir)
+    726         self.shell.configurables.append(self)
+    727         self.shell.has_sage_extensions = SAGE_EXTENSION in self.extensions
+    728 
+    729         # Load the %lprun extension if available
+    730         try:
+    731             import line_profiler
+    732         except ImportError:
+    733             pass
+    734         else:
+    735             self.extensions.append('line_profiler')
+    736 
+
+/usr/lib/python3.8/site-packages/traitlets/config/configurable.py in instance(cls=<class 'sage.repl.interpreter.SageTerminalInteractiveShell'>, *args=(), **kwargs={'config': {'TerminalIPythonApp': {'display_banner': False,...']}, 'SageTerminalApp': {'force_interact': True}}, 'ipython_dir': '/home/v4d3r/.ipython', 'parent': <sage.repl.interpreter.SageTerminalApp object>, 'profile_dir': <IPython.core.profiledir.ProfileDir object>})
+    397             >>> class Foo(SingletonConfigurable): pass
+    398             >>> foo = Foo.instance()
+    399             >>> foo == Foo.instance()
+    400             True
+    401 
+    402         Create a subclass that is retrived using the base class instance::
+    403 
+    404             >>> class Bar(SingletonConfigurable): pass
+    405             >>> class Bam(Bar): pass
+    406             >>> bam = Bam.instance()
+    407             >>> bam == Bar.instance()
+    408             True
+    409         """
+    410         # Create and save the instance
+    411         if cls._instance is None:
+--> 412             inst = cls(*args, **kwargs)
+        inst = undefined
+        cls = <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>
+        args = ()
+        kwargs = {'parent': <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>, 'config': {'TerminalIPythonApp': {'display_banner': False, 'verbose_crash': True, 'test_shell': False, 'shell_class': <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>}, 'InteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'TerminalInteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'InteractiveShellApp': {'extensions': ['sage']}, 'SageTerminalApp': {'force_interact': True}}, 'profile_dir': <IPython.core.profiledir.ProfileDir object at 0x7fc22ad0ef70>, 'ipython_dir': '/home/v4d3r/.ipython'}
+    413             # Now make sure that the instance will also be returned by
+    414             # parent classes' _instance attribute.
+    415             for subclass in cls._walk_mro():
+    416                 subclass._instance = inst
+    417 
+    418         if isinstance(cls._instance, cls):
+    419             return cls._instance
+    420         else:
+    421             raise MultipleInstanceError(
+    422                 'Multiple incompatible subclass instances of '
+    423                 '%s are being created.' % cls.__name__
+    424             )
+    425 
+    426     @classmethod
+    427     def initialized(cls):
+
+/usr/lib/python3.8/site-packages/IPython/terminal/interactiveshell.py in __init__(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>, *args=(), **kwargs={'config': {'TerminalIPythonApp': {'display_banner': False,...']}, 'SageTerminalApp': {'force_interact': True}}, 'ipython_dir': '/home/v4d3r/.ipython', 'parent': <sage.repl.interpreter.SageTerminalApp object>, 'profile_dir': <IPython.core.profiledir.ProfileDir object>})
+    504 
+    505     def init_alias(self):
+    506         # The parent class defines aliases that can be safely used with any
+    507         # frontend.
+    508         super(TerminalInteractiveShell, self).init_alias()
+    509 
+    510         # Now define aliases that only make sense on the terminal, because they
+    511         # need direct access to the console in a way that we can't emulate in
+    512         # GUI or web frontend
+    513         if os.name == 'posix':
+    514             for cmd in ('clear', 'more', 'less', 'man'):
+    515                 self.alias_manager.soft_define_alias(cmd, cmd)
+    516 
+    517 
+    518     def __init__(self, *args, **kwargs):
+--> 519         super(TerminalInteractiveShell, self).__init__(*args, **kwargs)
+        global super = undefined
+        global TerminalInteractiveShell = <class 'IPython.terminal.interactiveshell.TerminalInteractiveShell'>
+        self.__init__ = <bound method TerminalInteractiveShell.__init__ of <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7fc22acc6cd0>>
+        args = ()
+        kwargs = {'parent': <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>, 'config': {'TerminalIPythonApp': {'display_banner': False, 'verbose_crash': True, 'test_shell': False, 'shell_class': <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>}, 'InteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'TerminalInteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'InteractiveShellApp': {'extensions': ['sage']}, 'SageTerminalApp': {'force_interact': True}}, 'profile_dir': <IPython.core.profiledir.ProfileDir object at 0x7fc22ad0ef70>, 'ipython_dir': '/home/v4d3r/.ipython'}
+    520         self.init_prompt_toolkit_cli()
+    521         self.init_term_title()
+    522         self.keep_running = True
+    523 
+    524         self.debugger_history = InMemoryHistory()
+    525 
+    526     def ask_exit(self):
+    527         self.keep_running = False
+    528 
+    529     rl_next_input = None
+    530 
+    531     def interact(self, display_banner=DISPLAY_BANNER_DEPRECATED):
+    532 
+    533         if display_banner is not DISPLAY_BANNER_DEPRECATED:
+    534             warn('interact `display_banner` argument is deprecated since IPython 5.0. Call `show_banner()` if needed.', DeprecationWarning, stacklevel=2)
+
+/usr/lib/python3.8/site-packages/IPython/core/interactiveshell.py in __init__(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>, ipython_dir='/home/v4d3r/.ipython', profile_dir=<IPython.core.profiledir.ProfileDir object>, user_module=None, user_ns=None, custom_exceptions=((), None), **kwargs={'config': {'TerminalIPythonApp': {'display_banner': False,...']}, 'SageTerminalApp': {'force_interact': True}}, 'parent': <sage.repl.interpreter.SageTerminalApp object>})
+    668         self.init_pushd_popd_magic()
+    669         self.init_user_ns()
+    670         self.init_logger()
+    671         self.init_builtins()
+    672 
+    673         # The following was in post_config_initialization
+    674         self.init_inspector()
+    675         self.raw_input_original = input
+    676         self.init_completer()
+    677         # TODO: init_io() needs to happen before init_traceback handlers
+    678         # because the traceback handlers hardcode the stdout/stderr streams.
+    679         # This logic in in debugger.Pdb and should eventually be changed.
+    680         self.init_io()
+    681         self.init_traceback_handlers(custom_exceptions)
+    682         self.init_prompts()
+--> 683         self.init_display_formatter()
+        self.init_display_formatter = <bound method SageTerminalInteractiveShell.init_display_formatter of <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7fc22acc6cd0>>
+    684         self.init_display_pub()
+    685         self.init_data_pub()
+    686         self.init_displayhook()
+    687         self.init_magics()
+    688         self.init_alias()
+    689         self.init_logstart()
+    690         self.init_pdb()
+    691         self.init_extension_manager()
+    692         self.init_payload()
+    693         self.init_deprecation_warnings()
+    694         self.hooks.late_startup_hook()
+    695         self.events.trigger('shell_initialized', self)
+    696         atexit.register(self.atexit_operations)
+    697 
+    698         # The trio runner is used for running Trio in the foreground thread. It
+
+/usr/lib/python3.8/site-packages/sage/repl/interpreter.py in init_display_formatter(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>)
+    242 
+    243         sage: from sage.repl.interpreter import SageTerminalInteractiveShell
+    244         sage: SageTerminalInteractiveShell()   # not tested
+    245         <sage.repl.interpreter.SageNotebookInteractiveShell object at 0x...>
+    246     """
+    247 
+    248     def init_display_formatter(self):
+    249         """
+    250         Switch to the Sage IPython commandline rich output backend
+    251 
+    252         EXAMPLES::
+    253 
+    254             sage: from sage.repl.interpreter import SageTerminalInteractiveShell
+    255             sage: SageTerminalInteractiveShell().init_display_formatter()   # not tested
+    256         """
+--> 257         from sage.repl.rich_output.backend_ipython import BackendIPythonCommandline
+        global sage.repl.rich_output.backend_ipython = undefined
+        BackendIPythonCommandline = undefined
+    258         backend = BackendIPythonCommandline()
+    259         backend.get_display_manager().switch_backend(backend, shell=self)
+    260 
+    261 
+    262 class SageTestShell(SageShellOverride, TerminalInteractiveShell):
+    263     """
+    264     Test Shell
+    265 
+    266     Care must be taken in these doctests to quit the test shell in
+    267     order to switch back the rich output display backend to the
+    268     doctest backend.
+    269 
+    270     EXAMPLES::
+    271 
+    272         sage: from sage.repl.interpreter import get_test_shell
+
+/usr/lib/python3.8/site-packages/sage/repl/rich_output/__init__.py in <module>
+      1 # -*- encoding: utf-8 -*-
+      2 
+----> 3 from .display_manager import get_display_manager
+        global display_manager = undefined
+        global get_display_manager = undefined
+      4 from .pretty_print import pretty_print
+      5 
+      6 
+
+/usr/lib/python3.8/site-packages/sage/repl/rich_output/display_manager.py in <module>
+     24     The Sage display manager using the doctest backend
+     25 """
+     26 
+     27 # ****************************************************************************
+     28 #       Copyright (C) 2015 Volker Braun <vbraun.name@gmail.com>
+     29 #
+     30 #  Distributed under the terms of the GNU General Public License (GPL)
+     31 #  as published by the Free Software Foundation; either version 2 of
+     32 #  the License, or (at your option) any later version.
+     33 #                  http://www.gnu.org/licenses/
+     34 # ****************************************************************************
+     35 
+     36 
+     37 import warnings
+     38 
+---> 39 from sage.structure.sage_object import SageObject
+        global sage.structure.sage_object = undefined
+        global SageObject = undefined
+     40 from sage.repl.rich_output.output_basic import (
+     41     OutputPlainText, OutputAsciiArt, OutputUnicodeArt, OutputLatex,
+     42 )
+     43 from sage.repl.rich_output.preferences import DisplayPreferences
+     44 
+     45 
+     46 class DisplayException(Exception):
+     47     """
+     48     Base exception for all rich output-related exceptions.
+     49 
+     50     EXAMPLES::
+     51 
+     52         sage: from sage.repl.rich_output.display_manager import DisplayException
+     53         sage: raise DisplayException('foo')
+     54         Traceback (most recent call last):
+
+/usr/lib/python3.8/site-packages/sage/structure/__init__.py in <module>
+      1 # Resolve a cyclic import
+----> 2 import sage.structure.element
+        global sage.structure.element = undefined
+
+/usr/lib/python3.8/site-packages/sage/structure/parent.pxd in init sage.structure.element (build/cythonized/sage/structure/element.c:34169)()
+      1 #*****************************************************************************
+      2 # This program is free software: you can redistribute it and/or modify
+      3 # it under the terms of the GNU General Public License as published by
+      4 # the Free Software Foundation, either version 2 of the License, or
+      5 # (at your option) any later version.
+      6 #                  http://www.gnu.org/licenses/
+      7 #*****************************************************************************
+      8 
+      9 cimport sage.structure.category_object
+     10 from sage.structure.coerce_dict cimport MonoDict, TripleDict
+     11 
+---> 12 cdef class Parent(sage.structure.category_object.CategoryObject):
+        global cdef = undefined
+        global Parent = undefined
+        global sage.structure.category_object.CategoryObject = undefined
+     13     cdef _element_constructor
+     14     cdef bint _element_init_pass_parent
+     15     cdef public _convert_method_name
+     16     cdef public _initial_coerce_list
+     17     cdef public _initial_action_list
+     18     cdef public _initial_convert_list
+     19     cdef readonly bint _coercions_used
+     20 
+     21     # Flags, see below
+     22     cdef int flags
+     23     cdef inline bint get_flag(self, int flag):
+     24         return self.flags & flag
+     25 
+     26     cpdef register_coercion(self, mor)
+     27     cpdef register_action(self, action)
+     28     cpdef register_conversion(self, mor)
+     29     cpdef register_embedding(self, embedding)
+     30 
+     31     cpdef bint is_exact(self) except -2
+
+/usr/lib/python3.8/site-packages/sage/structure/coerce.pxd in init sage.structure.parent (build/cythonized/sage/structure/parent.c:27572)()
+      1 from .parent cimport Parent
+      2 from .coerce_dict cimport TripleDict
+      3 
+      4 cpdef py_scalar_parent(py_type)
+      5 cpdef py_scalar_to_element(py)
+      6 cpdef bint parent_is_integers(P) except -1
+      7 cpdef bint is_numpy_type(t)
+      8 cpdef bint is_mpmath_type(t)
+      9 
+     10 
+---> 11 cdef class CoercionModel:
+        global cdef = undefined
+        global CoercionModel = undefined
+     12     # This MUST be a mapping to tuples, where each
+     13     # tuple contains at least two elements that are either
+     14     # None or of type Morphism.
+     15     cdef readonly TripleDict _coercion_maps
+     16 
+     17     # This MUST be a mapping to actions.
+     18     cdef readonly TripleDict _action_maps
+     19 
+     20     cpdef canonical_coercion(self, x, y)
+     21     cpdef bin_op(self, x, y, op)
+     22     cpdef richcmp(self, x, y, int op)
+     23 
+     24     cpdef coercion_maps(self, R, S)
+     25     cpdef discover_coercion(self, R, S)
+     26     cpdef verify_coercion_maps(self, R, S, homs, bint fix=*)
+     27     cpdef verify_action(self, action, R, S, op, bint fix=*)
+     28 
+     29     cpdef get_action(self, R, S, op=*, r=*, s=*)
+     30     cpdef discover_action(self, R, S, op, r=*, s=*)
+     31 
+
+gmpy2.pxd in init sage.structure.coerce (build/cythonized/sage/structure/coerce.c:23180)()
+
+TypeError: gmpy2.mpz is not a type object
+
+***************************************************************************
+
+History of session input:
