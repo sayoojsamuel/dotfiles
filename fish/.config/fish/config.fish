@@ -33,3 +33,11 @@ function emacss
     emacsclient -n "$1" 2>/dev/null || /usr/bin/emacs "$1"
 end
 alias f='emacss'
+
+# set greenbitch removal
+set LS_COLORS "tw=30;40:ow=38;40"
+
+# tabtab source for electron-forge package
+# uninstall by removing these lines or running `tabtab uninstall electron-forge`
+[ -f /home/v4d3r/.cache/yay/httptoolkit/src/httptoolkit/node_modules/tabtab/.completions/electron-forge.fish ]; and . /home/v4d3r/.cache/yay/httptoolkit/src/httptoolkit/node_modules/tabtab/.completions/electron-forge.fish
+
