@@ -8,7 +8,11 @@ set -gx PATH /home/v4d3r/.local/bin $PATH
 alias rmf='rm -rf'
 alias r='ranger' 
 alias xcp='xclip -sel clipboard'
+# set greenbitch removal
+set LS_COLORS "tw=30;40:ow=38;40"
 
+bind \cf accept-autosuggestion
+#bind \cy accept-autosuggestion execute
 function fcp    
     xclip -sel clip < $argv
 end
@@ -34,8 +38,6 @@ function emacss
 end
 alias f='emacss'
 
-# set greenbitch removal
-set LS_COLORS "tw=30;40:ow=38;40"
 
 # tabtab source for electron-forge package
 # uninstall by removing these lines or running `tabtab uninstall electron-forge`

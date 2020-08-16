@@ -6,12 +6,12 @@ IPython post-mortem report
  'commit_source': '(none found)',
  'default_encoding': 'utf-8',
  'ipython_path': '/usr/lib/python3.8/site-packages/IPython',
- 'ipython_version': '7.12.0',
+ 'ipython_version': '7.17.0',
  'os_name': 'posix',
- 'platform': 'Linux-5.5.6-arch1-1-x86_64-with-glibc2.2.5',
- 'sys_executable': '/usr/bin/python3',
+ 'platform': 'Linux-5.7.12-arch1-1-x86_64-with-glibc2.2.5',
+ 'sys_executable': '/bin/python3',
  'sys_platform': 'linux',
- 'sys_version': '3.8.1 (default, Jan 22 2020, 06:38:00) \n[GCC 9.2.0]'}
+ 'sys_version': '3.8.5 (default, Jul 27 2020, 08:42:51) \n[GCC 10.1.0]'}
 
 ***************************************************************************
 
@@ -23,8 +23,192 @@ Crash traceback:
 
 ---------------------------------------------------------------------------
 ---------------------------------------------------------------------------
-TypeError                                    Python 3.8.1: /usr/bin/python3
-                                                   Tue Apr  7 02:03:03 2020
+KeyError                                         Python 3.8.5: /bin/python3
+                                                   Fri Aug 14 21:15:52 2020
+A problem occurred executing Python code.  Here is the sequence of function
+calls leading up to the error, with the most recent (innermost) call last.
+/usr/lib/python3.8/site-packages/jedi/cache.py in wrapper(self=<Completion: random>, *args=(), **kwargs={})
+    108         try:
+--> 109             return dct[key]
+        dct = {}
+        key = ((), frozenset())
+    110         except KeyError:
+
+KeyError: ((), frozenset())
+
+During handling of the above exception, another exception occurred:
+
+---------------------------------------------------------------------------
+KeyError                                         Python 3.8.5: /bin/python3
+                                                   Fri Aug 14 21:15:52 2020
+A problem occurred executing Python code.  Here is the sequence of function
+calls leading up to the error, with the most recent (innermost) call last.
+/usr/lib/python3.8/site-packages/jedi/cache.py in wrapper(self=MixedName(<CompiledName: (<CompiledValueName: string_name=NamespaceObject>).random>), *args=(), **kwargs={})
+    108         try:
+--> 109             return dct[key]
+        dct = {}
+        key = ((), frozenset())
+    110         except KeyError:
+
+KeyError: ((), frozenset())
+
+During handling of the above exception, another exception occurred:
+
+---------------------------------------------------------------------------
+KeyError                                         Python 3.8.5: /bin/python3
+                                                   Fri Aug 14 21:15:52 2020
+A problem occurred executing Python code.  Here is the sequence of function
+calls leading up to the error, with the most recent (innermost) call last.
+/usr/lib/python3.8/site-packages/IPython/terminal/ptutils.py in get_completions(self=<IPython.terminal.ptutils.IPythonPTCompleter object>, document=Document('random', 6), complete_event=CompleteEvent(text_inserted=False, completion_requested=True))
+    112             try:
+--> 113                 yield from self._get_completions(body, offset, cursor_position, self.ipy_completer)
+        self._get_completions = <function IPythonPTCompleter._get_completions at 0x7f7058c50700>
+        body = 'random'
+        offset = 6
+        cursor_position = 6
+        self.ipy_completer = <IPython.core.completer.IPCompleter object at 0x7f7058a927c0>
+    114             except Exception as e:
+
+/usr/lib/python3.8/site-packages/IPython/terminal/ptutils.py in _get_completions(body='random', offset=6, cursor_position=6, ipyc=<IPython.core.completer.IPCompleter object>)
+    125             body, ipyc.completions(body, offset))
+--> 126         for c in completions:
+        c = undefined
+        completions = <generator object _deduplicate_completions at 0x7f6f09e29820>
+    127             if not c.text:
+
+/usr/lib/python3.8/site-packages/IPython/core/completer.py in _deduplicate_completions(text='random', completions=<generator object IPCompleter.completions>)
+    437     """
+--> 438     completions = list(completions)
+        completions = <generator object IPCompleter.completions at 0x7f6f09e297b0>
+        global list = undefined
+    439     if not completions:
+
+/usr/lib/python3.8/site-packages/IPython/core/completer.py in completions(self=<IPython.core.completer.IPCompleter object>, text='random', offset=6)
+   1817         try:
+-> 1818             for c in self._completions(text, offset, _timeout=self.jedi_compute_type_timeout/1000):
+        c = undefined
+        self._completions = <bound method IPCompleter._completions of <IPython.core.completer.IPCompleter object at 0x7f7058a927c0>>
+        text = 'random'
+        offset = 6
+        global _timeout = undefined
+        self.jedi_compute_type_timeout = 400
+   1819                 if c and (c in seen):
+
+/usr/lib/python3.8/site-packages/IPython/core/completer.py in _completions(self=<IPython.core.completer.IPCompleter object>, full_text='random', offset=6, _timeout=0.4)
+   1874                 if type_ == 'function':
+-> 1875                     signature = _make_signature(jm)
+        signature = undefined
+        global _make_signature = <function _make_signature at 0x7f7058c4e0d0>
+        jm = <Completion: random>
+   1876                 else:
+
+/usr/lib/python3.8/site-packages/IPython/core/completer.py in _make_signature(completion=<Completion: random>)
+    990 
+--> 991     return '(%s)'% ', '.join([f for f in (_formatparamchildren(p) for p in completion.params) if f])
+        global join = undefined
+        global f = undefined
+        global _formatparamchildren = <function _formatparamchildren at 0x7f7058c4e040>
+        global p = undefined
+        completion.params = undefined
+    992 
+
+/usr/lib/python3.8/site-packages/jedi/cache.py in wrapper(self=<Completion: random>, *args=(), **kwargs={})
+    110         except KeyError:
+--> 111             result = method(self, *args, **kwargs)
+        result = undefined
+        global method = undefined
+        self = <Completion: random>
+        args = ()
+        kwargs = {}
+    112             dct[key] = result
+
+/usr/lib/python3.8/site-packages/jedi/api/classes.py in params(self=<Completion: random>)
+    478         # with overloading.
+--> 479         for signature in self._get_signatures():
+        signature = undefined
+        self._get_signatures = <bound method BaseName._get_signatures of <Completion: random>>
+    480             return [
+
+/usr/lib/python3.8/site-packages/jedi/api/classes.py in _get_signatures(self=<Completion: random>, for_docstring=False)
+    560         names = convert_names([self._name], prefer_stubs=True)
+--> 561         return [sig for name in names for sig in name.infer().get_signatures()]
+        global sig = undefined
+        global name = undefined
+        names = [MixedName(<CompiledName: (<CompiledValueName: string_name=NamespaceObject>).random>)]
+        global name.infer.get_signatures = undefined
+    562 
+
+/usr/lib/python3.8/site-packages/jedi/api/classes.py in <listcomp>(.0=<list_iterator object>)
+    560         names = convert_names([self._name], prefer_stubs=True)
+--> 561         return [sig for name in names for sig in name.infer().get_signatures()]
+        sig = undefined
+        name = MixedName(<CompiledName: (<CompiledValueName: string_name=NamespaceObject>).random>)
+        global names = undefined
+        name.infer.get_signatures = undefined
+    562 
+
+/usr/lib/python3.8/site-packages/jedi/cache.py in wrapper(self=MixedName(<CompiledName: (<CompiledValueName: string_name=NamespaceObject>).random>), *args=(), **kwargs={})
+    110         except KeyError:
+--> 111             result = method(self, *args, **kwargs)
+        result = undefined
+        global method = undefined
+        self = MixedName(<CompiledName: (<CompiledValueName: string_name=NamespaceObject>).random>)
+        args = ()
+        kwargs = {}
+    112             dct[key] = result
+
+/usr/lib/python3.8/site-packages/jedi/inference/compiled/mixed.py in infer(self=MixedName(<CompiledName: (<CompiledValueName: string_name=NamespaceObject>).random>))
+    128         module_context = tree_value.get_root_context()
+--> 129         return _create(self._inference_state, compiled_value, module_context)
+        global _create = <function _memoize_default.<locals>.func.<locals>.wrapper at 0x7f7058cddd30>
+        self._inference_state = <jedi.inference.InferenceState object at 0x7f6f09dd2c70>
+        global compiled_value = undefined
+        module_context = ModuleContext(<ModuleValue: __main__@1-1 is_stub=False>)
+    130 
+
+/usr/lib/python3.8/site-packages/jedi/inference/cache.py in wrapper(obj=<jedi.inference.InferenceState object>, *args=(<CompiledValue: <function random>>, ModuleContext(<ModuleValue: __main__@1-1 is_stub=False>)), **kwargs={})
+     42                     memo[key] = default
+---> 43                 rv = function(obj, *args, **kwargs)
+        rv = undefined
+        global function = undefined
+        obj = <jedi.inference.InferenceState object at 0x7f6f09dd2c70>
+        args = (<CompiledValue: <function random at 0x7f705826e1f0>>, ModuleContext(<ModuleValue: __main__@1-1 is_stub=False>))
+        kwargs = {}
+     44                 memo[key] = rv
+
+/usr/lib/python3.8/site-packages/jedi/inference/compiled/mixed.py in _create(inference_state=<jedi.inference.InferenceState object>, compiled_value=<CompiledValue: <function random>>, module_context=ModuleContext(<ModuleValue: __main__@1-1 is_stub=False>))
+    256     python_object = compiled_value.access_handle.access._obj
+--> 257     result = _find_syntax_node_name(inference_state, python_object)
+        result = undefined
+        global _find_syntax_node_name = <function _find_syntax_node_name at 0x7f7058cdda60>
+        inference_state = <jedi.inference.InferenceState object at 0x7f6f09dd2c70>
+        python_object = <function random at 0x7f705826e1f0>
+    258     if result is None:
+
+/usr/lib/python3.8/site-packages/jedi/inference/compiled/mixed.py in _find_syntax_node_name(inference_state=<jedi.inference.InferenceState object>, python_object=<function random>)
+    236 
+--> 237     code_lines = get_cached_code_lines(inference_state.grammar, path)
+        code_lines = undefined
+        global get_cached_code_lines = <function get_cached_code_lines at 0x7f7058e34af0>
+        inference_state.grammar = <PythonGrammar:single_input file_input eval_input ...>
+        path = '/usr/lib/python3.8/site-packages/sage/misc/prandom.py'
+    238     # It's really hard to actually get the right definition, here as a last
+
+/usr/lib/python3.8/site-packages/jedi/parser_utils.py in get_cached_code_lines(grammar=<PythonGrammar:single_input file_input eval_input ...>, path='/usr/lib/python3.8/site-packages/sage/misc/prandom.py')
+    279     """
+--> 280     return parser_cache[grammar._hashed][path].lines
+        global parser_cache = {'794994e8c72bcddf8bc978960663bebe60131acc6abf01ffbf1454a9d8dda96e': {None: <parso.cache._NodeCacheItem object at 0x7f6f09138f70>, PosixPath('/usr/lib/python3.8/site-packages/sage/misc/prandom.py'): <parso.cache._NodeCacheItem object at 0x7f6f090be7f0>}, '593d51111df2a7984c5d14ec09b1fb4e1c5fa86889ca077d5efe8caf989e2ebc': {PosixPath('/usr/lib/python3.8/site-packages/jedi/third_party/typeshed/stdlib/2and3/builtins.pyi'): <parso.cache._NodeCacheItem object at 0x7f6f090beb80>, PosixPath('/usr/lib/python3.8/site-packages/jedi/third_party/typeshed/stdlib/3/sys.pyi'): <parso.cache._NodeCacheItem object at 0x7f6f08ef6730>}}
+        grammar._hashed = '794994e8c72bcddf8bc978960663bebe60131acc6abf01ffbf1454a9d8dda96e'
+        path.lines = undefined
+    281 
+
+KeyError: '/usr/lib/python3.8/site-packages/sage/misc/prandom.py'
+
+During handling of the above exception, another exception occurred:
+
+---------------------------------------------------------------------------
+AttributeError                                   Python 3.8.5: /bin/python3
+                                                   Fri Aug 14 21:15:52 2020
 A problem occurred executing Python code.  Here is the sequence of function
 calls leading up to the error, with the most recent (innermost) call last.
 /usr/bin/sage-ipython in <module>
@@ -42,395 +226,690 @@ calls leading up to the error, with the most recent (innermost) call last.
      12 from sage.repl.interpreter import SageTerminalApp
      13 
      14 app = SageTerminalApp.instance()
----> 15 app.initialize()
-        global app.initialize = <bound method TerminalIPythonApp.initialize of <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>>
-     16 app.start()
+     15 app.initialize()
+---> 16 app.start()
+        global app.start = <bound method TerminalIPythonApp.start of <sage.repl.interpreter.SageTerminalApp object at 0x7f705a6a0130>>
 
-</usr/lib/python3.8/site-packages/decorator.py:decorator-gen-113> in initialize(self=<sage.repl.interpreter.SageTerminalApp object>, argv=None)
+/usr/lib/python3.8/site-packages/IPython/terminal/ipapp.py in start(self=<sage.repl.interpreter.SageTerminalApp object>)
+    341         if self.log_level <= logging.INFO: print()
+    342 
+    343     def _pylab_changed(self, name, old, new):
+    344         """Replace --pylab='inline' with --pylab='auto'"""
+    345         if new == 'inline':
+    346             warnings.warn("'inline' not available as pylab backend, "
+    347                       "using 'auto' instead.")
+    348             self.pylab = 'auto'
+    349 
+    350     def start(self):
+    351         if self.subapp is not None:
+    352             return self.subapp.start()
+    353         # perform any prexec steps:
+    354         if self.interact:
+    355             self.log.debug("Starting IPython's mainloop...")
+--> 356             self.shell.mainloop()
+        self.shell.mainloop = <bound method TerminalInteractiveShell.mainloop of <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7f7058a92b20>>
+    357         else:
+    358             self.log.debug("IPython not interactive...")
+    359             if not self.shell.last_execution_succeeded:
+    360                 sys.exit(1)
+    361 
+    362 def load_default_config(ipython_dir=None):
+    363     """Load the default config file from the default ipython_dir.
+    364 
+    365     This is useful for embedded shells.
+    366     """
+    367     if ipython_dir is None:
+    368         ipython_dir = get_ipython_dir()
+    369 
+    370     profile_dir = os.path.join(ipython_dir, 'profile_default')
+    371     app = TerminalIPythonApp()
 
-/usr/lib/python3.8/site-packages/traitlets/config/application.py in catch_config_error(method=<function TerminalIPythonApp.initialize>, app=<sage.repl.interpreter.SageTerminalApp object>, *args=(None,), **kwargs={})
-     72     TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR = False
-     73 else:
-     74     raise ValueError("Unsupported value for environment variable: 'TRAITLETS_APPLICATION_RAISE_CONFIG_FILE_ERROR' is set to '%s' which is none of  {'0', '1', 'false', 'true', ''}."% _envvar )
-     75 
-     76 
-     77 @decorator
-     78 def catch_config_error(method, app, *args, **kwargs):
-     79     """Method decorator for catching invalid config (Trait/ArgumentErrors) during init.
-     80 
-     81     On a TraitError (generally caused by bad config), this will print the trait's
-     82     message, and exit the app.
-     83 
-     84     For use on init methods, to prevent invoking excepthook on invalid input.
-     85     """
-     86     try:
----> 87         return method(app, *args, **kwargs)
-        method = <function TerminalIPythonApp.initialize at 0x7fc22aca8af0>
-        app = <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>
-        args = (None,)
-        kwargs = {}
-     88     except (TraitError, ArgumentError) as e:
-     89         app.print_help()
-     90         app.log.fatal("Bad config encountered during initialization:")
-     91         app.log.fatal(str(e))
-     92         app.log.debug("Config at the time: %s", app.config)
-     93         app.exit(1)
-     94 
-     95 
-     96 class ApplicationError(Exception):
-     97     pass
-     98 
-     99 
-    100 class LevelFormatter(logging.Formatter):
-    101     """Formatter with additional `highlevel` record
-    102 
+/usr/lib/python3.8/site-packages/IPython/terminal/interactiveshell.py in mainloop(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>, display_banner=<object object>)
+    549                 if (not self.confirm_exit) \
+    550                         or self.ask_yes_no('Do you really want to exit ([y]/n)?','y','n'):
+    551                     self.ask_exit()
+    552 
+    553             else:
+    554                 if code:
+    555                     self.run_cell(code, store_history=True)
+    556 
+    557     def mainloop(self, display_banner=DISPLAY_BANNER_DEPRECATED):
+    558         # An extra layer of protection in case someone mashing Ctrl-C breaks
+    559         # out of our internal code.
+    560         if display_banner is not DISPLAY_BANNER_DEPRECATED:
+    561             warn('mainloop `display_banner` argument is deprecated since IPython 5.0. Call `show_banner()` if needed.', DeprecationWarning, stacklevel=2)
+    562         while True:
+    563             try:
+--> 564                 self.interact()
+        self.interact = <bound method TerminalInteractiveShell.interact of <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7f7058a92b20>>
+    565                 break
+    566             except KeyboardInterrupt as e:
+    567                 print("\n%s escaped interact()\n" % type(e).__name__)
+    568             finally:
+    569                 # An interrupt during the eventloop will mess up the
+    570                 # internal state of the prompt_toolkit library.
+    571                 # Stopping the eventloop fixes this, see
+    572                 # https://github.com/ipython/ipython/pull/9867
+    573                 if hasattr(self, '_eventloop'):
+    574                     self._eventloop.stop()
+    575 
+    576                 self.restore_term_title()
+    577 
+    578 
+    579     _inputhook = None
 
-/usr/lib/python3.8/site-packages/IPython/terminal/ipapp.py in initialize(self=<sage.repl.interpreter.SageTerminalApp object>, argv=None)
-    302 
-    303         return super(TerminalIPythonApp, self).parse_command_line(argv)
-    304     
-    305     @catch_config_error
-    306     def initialize(self, argv=None):
-    307         """Do actions after construct, but before starting the app."""
-    308         super(TerminalIPythonApp, self).initialize(argv)
-    309         if self.subapp is not None:
-    310             # don't bother initializing further, starting subapp
-    311             return
-    312         # print self.extra_args
-    313         if self.extra_args and not self.something_to_run:
-    314             self.file_to_run = self.extra_args[0]
-    315         self.init_path()
-    316         # create the shell
---> 317         self.init_shell()
-        self.init_shell = <bound method SageTerminalApp.init_shell of <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>>
-    318         # and draw the banner
-    319         self.init_banner()
-    320         # Now a variety of things that happen after the banner is printed.
-    321         self.init_gui_pylab()
-    322         self.init_extensions()
-    323         self.init_code()
-    324 
-    325     def init_shell(self):
-    326         """initialize the InteractiveShell instance"""
-    327         # Create an InteractiveShell instance.
-    328         # shell.display_banner should always be False for the terminal
-    329         # based app, because we call shell.show_banner() by hand below
-    330         # so the banner shows *before* all extension loading stuff.
-    331         self.shell = self.interactive_shell_class.instance(parent=self,
-    332                         profile_dir=self.profile_dir,
+/usr/lib/python3.8/site-packages/IPython/terminal/interactiveshell.py in interact(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>, display_banner=<object object>)
+    532     def ask_exit(self):
+    533         self.keep_running = False
+    534 
+    535     rl_next_input = None
+    536 
+    537     def interact(self, display_banner=DISPLAY_BANNER_DEPRECATED):
+    538 
+    539         if display_banner is not DISPLAY_BANNER_DEPRECATED:
+    540             warn('interact `display_banner` argument is deprecated since IPython 5.0. Call `show_banner()` if needed.', DeprecationWarning, stacklevel=2)
+    541 
+    542         self.keep_running = True
+    543         while self.keep_running:
+    544             print(self.separate_in, end='')
+    545 
+    546             try:
+--> 547                 code = self.prompt_for_code()
+        code = 'is_prime(4)'
+        self.prompt_for_code = <bound method TerminalInteractiveShell.prompt_for_code of <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7f7058a92b20>>
+    548             except EOFError:
+    549                 if (not self.confirm_exit) \
+    550                         or self.ask_yes_no('Do you really want to exit ([y]/n)?','y','n'):
+    551                     self.ask_exit()
+    552 
+    553             else:
+    554                 if code:
+    555                     self.run_cell(code, store_history=True)
+    556 
+    557     def mainloop(self, display_banner=DISPLAY_BANNER_DEPRECATED):
+    558         # An extra layer of protection in case someone mashing Ctrl-C breaks
+    559         # out of our internal code.
+    560         if display_banner is not DISPLAY_BANNER_DEPRECATED:
+    561             warn('mainloop `display_banner` argument is deprecated since IPython 5.0. Call `show_banner()` if needed.', DeprecationWarning, stacklevel=2)
+    562         while True:
 
-/usr/lib/python3.8/site-packages/sage/repl/interpreter.py in init_shell(self=<sage.repl.interpreter.SageTerminalApp object>)
-    706         Initialize the :class:`SageInteractiveShell` instance.
-    707 
-    708         .. note::
-    709 
-    710             This code is based on
-    711             :meth:`TerminalIPythonApp.init_shell`.
-    712 
-    713         EXAMPLES::
-    714 
-    715             sage: from sage.repl.interpreter import SageTerminalApp
-    716             sage: app = SageTerminalApp.instance()
-    717             sage: app.shell
-    718             <sage.repl.interpreter.SageTestShell object at 0x...>
-    719         """
-    720         # Shell initialization
---> 721         self.shell = self.shell_class.instance(
-        self.shell = None
-        self.shell_class.instance = <bound method SingletonConfigurable.instance of <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>>
-        global parent = undefined
-        self = <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>
-        global config = undefined
-        self.config = {'TerminalIPythonApp': {'display_banner': False, 'verbose_crash': True, 'test_shell': False, 'shell_class': <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>}, 'InteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'TerminalInteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'InteractiveShellApp': {'extensions': ['sage']}, 'SageTerminalApp': {'force_interact': True}}
-        global profile_dir = undefined
-        self.profile_dir = <IPython.core.profiledir.ProfileDir object at 0x7fc22ad0ef70>
-        global ipython_dir = undefined
-        self.ipython_dir = '/home/v4d3r/.ipython'
-    722             parent=self,
-    723             config=self.config,
-    724             profile_dir=self.profile_dir,
-    725             ipython_dir=self.ipython_dir)
-    726         self.shell.configurables.append(self)
-    727         self.shell.has_sage_extensions = SAGE_EXTENSION in self.extensions
-    728 
-    729         # Load the %lprun extension if available
-    730         try:
-    731             import line_profiler
-    732         except ImportError:
-    733             pass
-    734         else:
-    735             self.extensions.append('line_profiler')
-    736 
+/usr/lib/python3.8/site-packages/IPython/terminal/interactiveshell.py in prompt_for_code(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>)
+    458         # In order to make sure that asyncio code written in the
+    459         # interactive shell doesn't interfere with the prompt, we run the
+    460         # prompt in a different event loop.
+    461         # If we don't do this, people could spawn coroutine with a
+    462         # while/true inside which will freeze the prompt.
+    463 
+    464         try:
+    465             old_loop = asyncio.get_event_loop()
+    466         except RuntimeError:
+    467             # This happens when the user used `asyncio.run()`.
+    468             old_loop = None
+    469 
+    470         asyncio.set_event_loop(self.pt_loop)
+    471         try:
+    472             with patch_stdout(raw=True):
+--> 473                 text = self.pt_app.prompt(
+        text = undefined
+        self.pt_app.prompt = <bound method PromptSession.prompt of <prompt_toolkit.shortcuts.prompt.PromptSession object at 0x7f7052f83dc0>>
+        default = ''
+        self._extra_prompt_options = <bound method TerminalInteractiveShell._extra_prompt_options of <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7f7058a92b20>>
+    474                     default=default,
+    475                     **self._extra_prompt_options())
+    476         finally:
+    477             # Restore the original event loop.
+    478             asyncio.set_event_loop(old_loop)
+    479 
+    480         return text
+    481 
+    482     def enable_win_unicode_console(self):
+    483         # Since IPython 7.10 doesn't support python < 3.6 and PEP 528, Python uses the unicode APIs for the Windows
+    484         # console by default, so WUC shouldn't be needed.
+    485         from warnings import warn
+    486         warn("`enable_win_unicode_console` is deprecated since IPython 7.10, does not do anything and will be removed in the future",
+    487              DeprecationWarning,
+    488              stacklevel=2)
 
-/usr/lib/python3.8/site-packages/traitlets/config/configurable.py in instance(cls=<class 'sage.repl.interpreter.SageTerminalInteractiveShell'>, *args=(), **kwargs={'config': {'TerminalIPythonApp': {'display_banner': False,...']}, 'SageTerminalApp': {'force_interact': True}}, 'ipython_dir': '/home/v4d3r/.ipython', 'parent': <sage.repl.interpreter.SageTerminalApp object>, 'profile_dir': <IPython.core.profiledir.ProfileDir object>})
-    397             >>> class Foo(SingletonConfigurable): pass
-    398             >>> foo = Foo.instance()
-    399             >>> foo == Foo.instance()
-    400             True
-    401 
-    402         Create a subclass that is retrived using the base class instance::
-    403 
-    404             >>> class Bar(SingletonConfigurable): pass
-    405             >>> class Bam(Bar): pass
-    406             >>> bam = Bam.instance()
-    407             >>> bam == Bar.instance()
-    408             True
-    409         """
-    410         # Create and save the instance
-    411         if cls._instance is None:
---> 412             inst = cls(*args, **kwargs)
-        inst = undefined
-        cls = <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>
-        args = ()
-        kwargs = {'parent': <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>, 'config': {'TerminalIPythonApp': {'display_banner': False, 'verbose_crash': True, 'test_shell': False, 'shell_class': <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>}, 'InteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'TerminalInteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'InteractiveShellApp': {'extensions': ['sage']}, 'SageTerminalApp': {'force_interact': True}}, 'profile_dir': <IPython.core.profiledir.ProfileDir object at 0x7fc22ad0ef70>, 'ipython_dir': '/home/v4d3r/.ipython'}
-    413             # Now make sure that the instance will also be returned by
-    414             # parent classes' _instance attribute.
-    415             for subclass in cls._walk_mro():
-    416                 subclass._instance = inst
-    417 
-    418         if isinstance(cls._instance, cls):
-    419             return cls._instance
-    420         else:
-    421             raise MultipleInstanceError(
-    422                 'Multiple incompatible subclass instances of '
-    423                 '%s are being created.' % cls.__name__
-    424             )
-    425 
-    426     @classmethod
-    427     def initialized(cls):
+/usr/lib/python3.8/site-packages/prompt_toolkit/shortcuts/prompt.py in prompt(self=<prompt_toolkit.shortcuts.prompt.PromptSession object>, message=<prompt_toolkit.formatted_text.pygments.PygmentsTokens object>, editing_mode=None, refresh_interval=None, vi_mode=None, lexer=<IPython.terminal.ptutils.IPythonPTLexer object>, completer=None, complete_in_thread=False, is_password=None, key_bindings=None, bottom_toolbar=None, style=None, color_depth=None, include_default_pygments_style=None, style_transformation=None, swap_light_and_dark_colors=None, rprompt=None, multiline=True, prompt_continuation=<function TerminalInteractiveShell._extra_prompt_options.<locals>.<lambda>>, wrap_lines=None, enable_history_search=None, search_ignore_case=None, complete_while_typing=None, validate_while_typing=None, complete_style=<CompleteStyle.MULTI_COLUMN: 'MULTI_COLUMN'>, auto_suggest=None, validator=None, clipboard=None, mouse_support=None, input_processors=[ConditionalProcessor(processor=<prompt_toolkit.l...pt_options.<locals>.<lambda> at 0x7f6f09e23dc0>))], reserve_space_for_menu=6, enable_system_prompt=None, enable_suspend=None, enable_open_in_editor=None, tempfile_suffix=None, tempfile=None, default='', accept_default=False, pre_run=None, set_exception_handler=True)
+    979             self.tempfile_suffix = tempfile_suffix
+    980         if tempfile is not None:
+    981             self.tempfile = tempfile
+    982 
+    983         self._add_pre_run_callables(pre_run, accept_default)
+    984         self.default_buffer.reset(
+    985             default if isinstance(default, Document) else Document(default)
+    986         )
+    987         self.app.refresh_interval = self.refresh_interval  # This is not reactive.
+    988 
+    989         # If we are using the default output, and have a dumb terminal. Use the
+    990         # dumb prompt.
+    991         if self._output is None and is_dumb_terminal():
+    992             return get_event_loop().run_until_complete(self._dumb_prompt(self.message))
+    993 
+--> 994         return self.app.run(set_exception_handler=set_exception_handler)
+        self.app.run = <bound method Application.run of <prompt_toolkit.application.application.Application object at 0x7f7052faf8b0>>
+        set_exception_handler = True
+    995 
+    996     async def _dumb_prompt(self, message: AnyFormattedText = "") -> _T:
+    997         """
+    998         Prompt function for dumb terminals.
+    999 
+   1000         Dumb terminals have minimum rendering capabilities. We can only print
+   1001         text to the screen. We can't use colors, and we can't do cursor
+   1002         movements. The Emacs inferior shell is an example of a dumb terminal.
+   1003 
+   1004         We will show the prompt, and wait for the input. We still handle arrow
+   1005         keys, and all custom key bindings, but we don't really render the
+   1006         cursor movements. Instead we only print the typed character that's
+   1007         right before the cursor.
+   1008         """
+   1009         # Send prompt to output.
 
-/usr/lib/python3.8/site-packages/IPython/terminal/interactiveshell.py in __init__(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>, *args=(), **kwargs={'config': {'TerminalIPythonApp': {'display_banner': False,...']}, 'SageTerminalApp': {'force_interact': True}}, 'ipython_dir': '/home/v4d3r/.ipython', 'parent': <sage.repl.interpreter.SageTerminalApp object>, 'profile_dir': <IPython.core.profiledir.ProfileDir object>})
-    504 
-    505     def init_alias(self):
-    506         # The parent class defines aliases that can be safely used with any
-    507         # frontend.
-    508         super(TerminalInteractiveShell, self).init_alias()
-    509 
-    510         # Now define aliases that only make sense on the terminal, because they
-    511         # need direct access to the console in a way that we can't emulate in
-    512         # GUI or web frontend
-    513         if os.name == 'posix':
-    514             for cmd in ('clear', 'more', 'less', 'man'):
-    515                 self.alias_manager.soft_define_alias(cmd, cmd)
-    516 
-    517 
-    518     def __init__(self, *args, **kwargs):
---> 519         super(TerminalInteractiveShell, self).__init__(*args, **kwargs)
-        global super = undefined
-        global TerminalInteractiveShell = <class 'IPython.terminal.interactiveshell.TerminalInteractiveShell'>
-        self.__init__ = <bound method TerminalInteractiveShell.__init__ of <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7fc22acc6cd0>>
-        args = ()
-        kwargs = {'parent': <sage.repl.interpreter.SageTerminalApp object at 0x7fc22c770160>, 'config': {'TerminalIPythonApp': {'display_banner': False, 'verbose_crash': True, 'test_shell': False, 'shell_class': <class 'sage.repl.interpreter.SageTerminalInteractiveShell'>}, 'InteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'TerminalInteractiveShell': {'prompts_class': <class 'sage.repl.prompts.SagePrompts'>, 'ast_node_interactivity': 'all', 'colors': 'LightBG', 'simple_prompt': False, 'term_title': True, 'confirm_exit': False, 'separate_in': ''}, 'InteractiveShellApp': {'extensions': ['sage']}, 'SageTerminalApp': {'force_interact': True}}, 'profile_dir': <IPython.core.profiledir.ProfileDir object at 0x7fc22ad0ef70>, 'ipython_dir': '/home/v4d3r/.ipython'}
-    520         self.init_prompt_toolkit_cli()
-    521         self.init_term_title()
-    522         self.keep_running = True
-    523 
-    524         self.debugger_history = InMemoryHistory()
-    525 
-    526     def ask_exit(self):
-    527         self.keep_running = False
-    528 
-    529     rl_next_input = None
-    530 
-    531     def interact(self, display_banner=DISPLAY_BANNER_DEPRECATED):
-    532 
-    533         if display_banner is not DISPLAY_BANNER_DEPRECATED:
-    534             warn('interact `display_banner` argument is deprecated since IPython 5.0. Call `show_banner()` if needed.', DeprecationWarning, stacklevel=2)
+/usr/lib/python3.8/site-packages/prompt_toolkit/application/application.py in run(self=<prompt_toolkit.application.application.Application object>, pre_run=None, set_exception_handler=True)
+    800         """
+    801         # We don't create a new event loop by default, because we want to be
+    802         # sure that when this is called multiple times, each call of `run()`
+    803         # goes through the same event loop. This way, users can schedule
+    804         # background-tasks that keep running across multiple prompts.
+    805         try:
+    806             loop = get_event_loop()
+    807         except RuntimeError:
+    808             # Possibly we are not running in the main thread, where no event
+    809             # loop is set by default. Or somebody called `asyncio.run()`
+    810             # before, which closes the existing event loop. We can create a new
+    811             # loop.
+    812             loop = new_event_loop()
+    813             set_event_loop(loop)
+    814 
+--> 815         return loop.run_until_complete(
+        loop.run_until_complete = <bound method BaseEventLoop.run_until_complete of <_UnixSelectorEventLoop running=False closed=False debug=False>>
+        self.run_async = <bound method Application.run_async of <prompt_toolkit.application.application.Application object at 0x7f7052faf8b0>>
+        pre_run = None
+        set_exception_handler = True
+    816             self.run_async(pre_run=pre_run, set_exception_handler=set_exception_handler)
+    817         )
+    818 
+    819     def _handle_exception(
+    820         self, loop: AbstractEventLoop, context: Dict[str, Any]
+    821     ) -> None:
+    822         """
+    823         Handler for event loop exceptions.
+    824         This will print the exception, using run_in_terminal.
+    825         """
+    826         # For Python 2: we have to get traceback at this point, because
+    827         # we're still in the 'except:' block of the event loop where the
+    828         # traceback is still available. Moving this code in the
+    829         # 'print_exception' coroutine will loose the exception.
+    830         tb = get_traceback_from_context(context)
 
-/usr/lib/python3.8/site-packages/IPython/core/interactiveshell.py in __init__(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>, ipython_dir='/home/v4d3r/.ipython', profile_dir=<IPython.core.profiledir.ProfileDir object>, user_module=None, user_ns=None, custom_exceptions=((), None), **kwargs={'config': {'TerminalIPythonApp': {'display_banner': False,...']}, 'SageTerminalApp': {'force_interact': True}}, 'parent': <sage.repl.interpreter.SageTerminalApp object>})
-    668         self.init_pushd_popd_magic()
-    669         self.init_user_ns()
-    670         self.init_logger()
-    671         self.init_builtins()
-    672 
-    673         # The following was in post_config_initialization
-    674         self.init_inspector()
-    675         self.raw_input_original = input
-    676         self.init_completer()
-    677         # TODO: init_io() needs to happen before init_traceback handlers
-    678         # because the traceback handlers hardcode the stdout/stderr streams.
-    679         # This logic in in debugger.Pdb and should eventually be changed.
-    680         self.init_io()
-    681         self.init_traceback_handlers(custom_exceptions)
-    682         self.init_prompts()
---> 683         self.init_display_formatter()
-        self.init_display_formatter = <bound method SageTerminalInteractiveShell.init_display_formatter of <sage.repl.interpreter.SageTerminalInteractiveShell object at 0x7fc22acc6cd0>>
-    684         self.init_display_pub()
-    685         self.init_data_pub()
-    686         self.init_displayhook()
-    687         self.init_magics()
-    688         self.init_alias()
-    689         self.init_logstart()
-    690         self.init_pdb()
-    691         self.init_extension_manager()
-    692         self.init_payload()
-    693         self.init_deprecation_warnings()
-    694         self.hooks.late_startup_hook()
-    695         self.events.trigger('shell_initialized', self)
-    696         atexit.register(self.atexit_operations)
-    697 
-    698         # The trio runner is used for running Trio in the foreground thread. It
+/usr/lib/python3.8/asyncio/base_events.py in run_until_complete(self=<_UnixSelectorEventLoop running=False closed=False debug=False>, future=<Task finished name='Task-257' coro=<Application..."'KeyError' object has no attribute 'tb_frame'")>)
+    601         future.add_done_callback(_run_until_complete_cb)
+    602         try:
+    603             self.run_forever()
+    604         except:
+    605             if new_task and future.done() and not future.cancelled():
+    606                 # The coroutine raised a BaseException. Consume the exception
+    607                 # to not log a warning, the caller doesn't have access to the
+    608                 # local task.
+    609                 future.exception()
+    610             raise
+    611         finally:
+    612             future.remove_done_callback(_run_until_complete_cb)
+    613         if not future.done():
+    614             raise RuntimeError('Event loop stopped before Future completed.')
+    615 
+--> 616         return future.result()
+        future.result = <built-in method result of _asyncio.Task object at 0x7f6f09e44ae0>
+    617 
+    618     def stop(self):
+    619         """Stop running the event loop.
+    620 
+    621         Every callback already scheduled will still run.  This simply informs
+    622         run_forever to stop looping after a complete iteration.
+    623         """
+    624         self._stopping = True
+    625 
+    626     def close(self):
+    627         """Close the event loop.
+    628 
+    629         This clears the queues and shuts down the executor,
+    630         but does not wait for the executor to finish.
+    631 
 
-/usr/lib/python3.8/site-packages/sage/repl/interpreter.py in init_display_formatter(self=<sage.repl.interpreter.SageTerminalInteractiveShell object>)
-    242 
-    243         sage: from sage.repl.interpreter import SageTerminalInteractiveShell
-    244         sage: SageTerminalInteractiveShell()   # not tested
-    245         <sage.repl.interpreter.SageNotebookInteractiveShell object at 0x...>
-    246     """
-    247 
-    248     def init_display_formatter(self):
-    249         """
-    250         Switch to the Sage IPython commandline rich output backend
-    251 
-    252         EXAMPLES::
-    253 
-    254             sage: from sage.repl.interpreter import SageTerminalInteractiveShell
-    255             sage: SageTerminalInteractiveShell().init_display_formatter()   # not tested
-    256         """
---> 257         from sage.repl.rich_output.backend_ipython import BackendIPythonCommandline
-        global sage.repl.rich_output.backend_ipython = undefined
-        BackendIPythonCommandline = undefined
-    258         backend = BackendIPythonCommandline()
-    259         backend.get_display_manager().switch_backend(backend, shell=self)
-    260 
-    261 
-    262 class SageTestShell(SageShellOverride, TerminalInteractiveShell):
-    263     """
-    264     Test Shell
-    265 
-    266     Care must be taken in these doctests to quit the test shell in
-    267     order to switch back the rich output display backend to the
-    268     doctest backend.
-    269 
-    270     EXAMPLES::
-    271 
-    272         sage: from sage.repl.interpreter import get_test_shell
+/usr/lib/python3.8/site-packages/prompt_toolkit/application/application.py in run_async(self=<prompt_toolkit.application.application.Application object>, pre_run=None, set_exception_handler=True)
+    767                         # go in the finally! If `_run_async` raises
+    768                         # `KeyboardInterrupt`, we still want to wait for the
+    769                         # background tasks.
+    770                         await self.cancel_and_wait_for_background_tasks()
+    771 
+    772                         # Set the `_is_running` flag to `False`. Normally this
+    773                         # happened already in the finally block in `run_async`
+    774                         # above, but in case of exceptions, that's not always the
+    775                         # case.
+    776                         self._is_running = False
+    777                     return result
+    778             finally:
+    779                 if set_exception_handler:
+    780                     loop.set_exception_handler(previous_exc_handler)
+    781 
+--> 782         return await _run_async2()
+        _run_async2 = <function Application.run_async.<locals>._run_async2 at 0x7f6f09e23a60>
+    783 
+    784     def run(
+    785         self,
+    786         pre_run: Optional[Callable[[], None]] = None,
+    787         set_exception_handler: bool = True,
+    788     ) -> _AppResult:
+    789         """
+    790         A blocking 'run' call that waits until the UI is finished.
+    791 
+    792         This will start the current asyncio event loop. If no loop is set for
+    793         the current thread, then it will create a new loop.
+    794 
+    795         :param pre_run: Optional callable, which is called right after the
+    796             "reset" of the application.
+    797         :param set_exception_handler: When set, in case of an exception, go out
 
-/usr/lib/python3.8/site-packages/sage/repl/rich_output/__init__.py in <module>
-      1 # -*- encoding: utf-8 -*-
-      2 
-----> 3 from .display_manager import get_display_manager
-        global display_manager = undefined
-        global get_display_manager = undefined
-      4 from .pretty_print import pretty_print
-      5 
-      6 
+/usr/lib/python3.8/site-packages/prompt_toolkit/application/application.py in _run_async2()
+    755 
+    756             loop = get_event_loop()
+    757             if set_exception_handler:
+    758                 previous_exc_handler = loop.get_exception_handler()
+    759                 loop.set_exception_handler(self._handle_exception)
+    760 
+    761             try:
+    762                 with set_app(self):
+    763                     try:
+    764                         result = await _run_async()
+    765                     finally:
+    766                         # Wait for the background tasks to be done. This needs to
+    767                         # go in the finally! If `_run_async` raises
+    768                         # `KeyboardInterrupt`, we still want to wait for the
+    769                         # background tasks.
+--> 770                         await self.cancel_and_wait_for_background_tasks()
+        global self.cancel_and_wait_for_background_tasks = undefined
+    771 
+    772                         # Set the `_is_running` flag to `False`. Normally this
+    773                         # happened already in the finally block in `run_async`
+    774                         # above, but in case of exceptions, that's not always the
+    775                         # case.
+    776                         self._is_running = False
+    777                     return result
+    778             finally:
+    779                 if set_exception_handler:
+    780                     loop.set_exception_handler(previous_exc_handler)
+    781 
+    782         return await _run_async2()
+    783 
+    784     def run(
+    785         self,
 
-/usr/lib/python3.8/site-packages/sage/repl/rich_output/display_manager.py in <module>
-     24     The Sage display manager using the doctest backend
-     25 """
-     26 
-     27 # ****************************************************************************
-     28 #       Copyright (C) 2015 Volker Braun <vbraun.name@gmail.com>
-     29 #
-     30 #  Distributed under the terms of the GNU General Public License (GPL)
-     31 #  as published by the Free Software Foundation; either version 2 of
-     32 #  the License, or (at your option) any later version.
-     33 #                  http://www.gnu.org/licenses/
-     34 # ****************************************************************************
-     35 
-     36 
-     37 import warnings
-     38 
----> 39 from sage.structure.sage_object import SageObject
-        global sage.structure.sage_object = undefined
-        global SageObject = undefined
-     40 from sage.repl.rich_output.output_basic import (
-     41     OutputPlainText, OutputAsciiArt, OutputUnicodeArt, OutputLatex,
-     42 )
-     43 from sage.repl.rich_output.preferences import DisplayPreferences
+/usr/lib/python3.8/site-packages/prompt_toolkit/application/application.py in cancel_and_wait_for_background_tasks(self=<prompt_toolkit.application.application.Application object>)
+    856 
+    857     async def cancel_and_wait_for_background_tasks(self) -> None:
+    858         """
+    859         Cancel all background tasks, and wait for the cancellation to be done.
+    860         If any of the background tasks raised an exception, this will also
+    861         propagate the exception.
+    862 
+    863         (If we had nurseries like Trio, this would be the `__aexit__` of a
+    864         nursery.)
+    865         """
+    866         for task in self.background_tasks:
+    867             task.cancel()
+    868 
+    869         for task in self.background_tasks:
+    870             try:
+--> 871                 await task
+        task = <Task finished name='Task-286' coro=<Buffer._create_completer_coroutine.<locals>.async_completer() done, defined at /usr/lib/python3.8/site-packages/prompt_toolkit/buffer.py:1841> exception=AttributeError("'KeyError' object has no attribute 'tb_frame'")>
+    872             except CancelledError:
+    873                 pass
+    874 
+    875     def cpr_not_supported_callback(self) -> None:
+    876         """
+    877         Called when we don't receive the cursor position response in time.
+    878         """
+    879         if not self.input.responds_to_cpr:
+    880             return  # We know about this already.
+    881 
+    882         def in_terminal() -> None:
+    883             self.output.write(
+    884                 "WARNING: your terminal doesn't support cursor position requests (CPR).\r\n"
+    885             )
+    886             self.output.flush()
+
+/usr/lib/python3.8/site-packages/prompt_toolkit/buffer.py in new_coroutine(*a=(), **kw={'complete_event': CompleteEvent(text_inserted=False, completion_requested=True), 'insert_common_part': True, 'select_first': False, 'select_last': False})
+   1839     running = False
+   1840 
+   1841     @wraps(coroutine)
+   1842     async def new_coroutine(*a: Any, **kw: Any) -> Any:
+   1843         nonlocal running
+   1844 
+   1845         # Don't start a new function, if the previous is still in progress.
+   1846         if running:
+   1847             return
+   1848 
+   1849         running = True
+   1850 
+   1851         try:
+   1852             while True:
+   1853                 try:
+-> 1854                     await coroutine(*a, **kw)
+        global coroutine = undefined
+        a = ()
+        kw = {'select_first': False, 'select_last': False, 'insert_common_part': True, 'complete_event': CompleteEvent(text_inserted=False, completion_requested=True)}
+   1855                 except _Retry:
+   1856                     continue
+   1857                 else:
+   1858                     return None
+   1859         finally:
+   1860             running = False
+   1861 
+   1862     return cast(_T, new_coroutine)
+   1863 
+   1864 
+   1865 class _Retry(Exception):
+   1866     " Retry in `_only_one_at_a_time`. "
+   1867 
+   1868 
+   1869 def indent(buffer: Buffer, from_row: int, to_row: int, count: int = 1) -> None:
+
+/usr/lib/python3.8/site-packages/prompt_toolkit/buffer.py in async_completer(select_first=False, select_last=False, insert_common_part=True, complete_event=CompleteEvent(text_inserted=False, completion_requested=True))
+   1668             complete_event = complete_event or CompleteEvent(text_inserted=True)
+   1669 
+   1670             # Don't complete when we already have completions.
+   1671             if self.complete_state or not self.completer:
+   1672                 return
+   1673 
+   1674             # Create an empty CompletionState.
+   1675             complete_state = CompletionState(original_document=self.document)
+   1676             self.complete_state = complete_state
+   1677 
+   1678             def proceed() -> bool:
+   1679                 """ Keep retrieving completions. Input text has not yet changed
+   1680                 while generating completions. """
+   1681                 return self.complete_state == complete_state
+   1682 
+-> 1683             async for completion in self.completer.get_completions_async(
+        completion = undefined
+        global self.completer.get_completions_async = undefined
+        document = Document('random', 6)
+        complete_event = CompleteEvent(text_inserted=False, completion_requested=True)
+   1684                 document, complete_event
+   1685             ):
+   1686                 complete_state.completions.append(completion)
+   1687                 self.on_completions_changed.fire()
+   1688 
+   1689                 # If the input text changes, abort.
+   1690                 if not proceed():
+   1691                     break
+   1692 
+   1693             completions = complete_state.completions
+   1694 
+   1695             # When there is only one completion, which has nothing to add, ignore it.
+   1696             if len(completions) == 1 and completion_does_nothing(
+   1697                 document, completions[0]
+   1698             ):
+
+/usr/lib/python3.8/site-packages/prompt_toolkit/completion/base.py in get_completions_async(self=DynamicCompleter(<function PromptSession._create...ils.IPythonPTCompleter object at 0x7f70530db7f0>), document=Document('random', 6), complete_event=CompleteEvent(text_inserted=False, completion_requested=True))
+    254 
+    255     def __init__(self, get_completer: Callable[[], Optional[Completer]]) -> None:
+    256         self.get_completer = get_completer
+    257 
+    258     def get_completions(
+    259         self, document: Document, complete_event: CompleteEvent
+    260     ) -> Iterable[Completion]:
+    261         completer = self.get_completer() or DummyCompleter()
+    262         return completer.get_completions(document, complete_event)
+    263 
+    264     async def get_completions_async(
+    265         self, document: Document, complete_event: CompleteEvent
+    266     ) -> AsyncGenerator[Completion, None]:
+    267         completer = self.get_completer() or DummyCompleter()
+    268 
+--> 269         async for completion in completer.get_completions_async(
+        completion = undefined
+        completer.get_completions_async = <bound method Completer.get_completions_async of <IPython.terminal.ptutils.IPythonPTCompleter object at 0x7f70530db7f0>>
+        document = Document('random', 6)
+        complete_event = CompleteEvent(text_inserted=False, completion_requested=True)
+    270             document, complete_event
+    271         ):
+    272             yield completion
+    273 
+    274     def __repr__(self) -> str:
+    275         return "DynamicCompleter(%r -> %r)" % (self.get_completer, self.get_completer())
+    276 
+    277 
+    278 class _MergedCompleter(Completer):
+    279     """
+    280     Combine several completers into one.
+    281     """
+    282 
+    283     def __init__(self, completers: Sequence[Completer]) -> None:
+    284         self.completers = completers
+
+/usr/lib/python3.8/site-packages/prompt_toolkit/completion/base.py in get_completions_async(self=<IPython.terminal.ptutils.IPythonPTCompleter object>, document=Document('random', 6), complete_event=CompleteEvent(text_inserted=False, completion_requested=True))
+    181         :param document: :class:`~prompt_toolkit.document.Document` instance.
+    182         :param complete_event: :class:`.CompleteEvent` instance.
+    183         """
+    184         while False:
+    185             yield
+    186 
+    187     async def get_completions_async(
+    188         self, document: Document, complete_event: CompleteEvent
+    189     ) -> AsyncGenerator[Completion, None]:
+    190         """
+    191         Asynchronous generator for completions. (Probably, you won't have to
+    192         override this.)
+    193 
+    194         Asynchronous generator of :class:`.Completion` objects.
+    195         """
+--> 196         for item in self.get_completions(document, complete_event):
+        item = undefined
+        self.get_completions = <bound method IPythonPTCompleter.get_completions of <IPython.terminal.ptutils.IPythonPTCompleter object at 0x7f70530db7f0>>
+        document = Document('random', 6)
+        complete_event = CompleteEvent(text_inserted=False, completion_requested=True)
+    197             yield item
+    198 
+    199 
+    200 class ThreadedCompleter(Completer):
+    201     """
+    202     Wrapper that runs the `get_completions` generator in a thread.
+    203 
+    204     (Use this to prevent the user interface from becoming unresponsive if the
+    205     generation of completions takes too much time.)
+    206 
+    207     The completions will be displayed as soon as they are produced. The user
+    208     can already select a completion, even if not all completions are displayed.
+    209     """
+    210 
+    211     def __init__(self, completer: Completer) -> None:
+
+/usr/lib/python3.8/site-packages/IPython/terminal/ptutils.py in get_completions(self=<IPython.terminal.ptutils.IPythonPTCompleter object>, document=Document('random', 6), complete_event=CompleteEvent(text_inserted=False, completion_requested=True))
+    101             return
+    102         # Some bits of our completion system may print stuff (e.g. if a module
+    103         # is imported). This context manager ensures that doesn't interfere with
+    104         # the prompt.
+    105 
+    106         with patch_stdout(), provisionalcompleter():
+    107             body = document.text
+    108             cursor_row = document.cursor_position_row
+    109             cursor_col = document.cursor_position_col
+    110             cursor_position = document.cursor_position
+    111             offset = cursor_to_position(body, cursor_row, cursor_col)
+    112             try:
+    113                 yield from self._get_completions(body, offset, cursor_position, self.ipy_completer)
+    114             except Exception as e:
+    115                 from traceback import print_tb
+--> 116                 print_tb(e)
+        print_tb = <function print_tb at 0x7f705a29fb80>
+        e = undefined
+    117 
+    118     @staticmethod
+    119     def _get_completions(body, offset, cursor_position, ipyc):
+    120         """
+    121         Private equivalent of get_completions() use only for unit_testing.
+    122         """
+    123         debug = getattr(ipyc, 'debug', False)
+    124         completions = _deduplicate_completions(
+    125             body, ipyc.completions(body, offset))
+    126         for c in completions:
+    127             if not c.text:
+    128                 # Guard against completion machinery giving us an empty string.
+    129                 continue
+    130             text = unicodedata.normalize('NFC', c.text)
+    131             # When the first character of the completion has a zero length,
+
+/usr/lib/python3.8/traceback.py in print_tb(tb=KeyError('/usr/lib/python3.8/site-packages/sage/misc/prandom.py'), limit=None, file=None)
+     38     """
+     39     return StackSummary.from_list(extracted_list).format()
+     40 
+     41 #
+     42 # Printing and Extracting Tracebacks.
+     43 #
      44 
-     45 
-     46 class DisplayException(Exception):
-     47     """
-     48     Base exception for all rich output-related exceptions.
-     49 
-     50     EXAMPLES::
-     51 
-     52         sage: from sage.repl.rich_output.display_manager import DisplayException
-     53         sage: raise DisplayException('foo')
-     54         Traceback (most recent call last):
+     45 def print_tb(tb, limit=None, file=None):
+     46     """Print up to 'limit' stack trace entries from the traceback 'tb'.
+     47 
+     48     If 'limit' is omitted or None, all entries are printed.  If 'file'
+     49     is omitted or None, the output goes to sys.stderr; otherwise
+     50     'file' should be an open file or file-like object with a write()
+     51     method.
+     52     """
+---> 53     print_list(extract_tb(tb, limit=limit), file=file)
+        global print_list = <function print_list at 0x7f705a29fa60>
+        global extract_tb = <function extract_tb at 0x7f705a29fca0>
+        tb = KeyError('/usr/lib/python3.8/site-packages/sage/misc/prandom.py')
+        limit = None
+        file = None
+     54 
+     55 def format_tb(tb, limit=None):
+     56     """A shorthand for 'format_list(extract_tb(tb, limit))'."""
+     57     return extract_tb(tb, limit=limit).format()
+     58 
+     59 def extract_tb(tb, limit=None):
+     60     """
+     61     Return a StackSummary object representing a list of
+     62     pre-processed entries from traceback.
+     63 
+     64     This is useful for alternate formatting of stack traces.  If
+     65     'limit' is omitted or None, all entries are extracted.  A
+     66     pre-processed stack trace entry is a FrameSummary object
+     67     containing attributes filename, lineno, name, and line
+     68     representing the information that is usually printed for a stack
 
-/usr/lib/python3.8/site-packages/sage/structure/__init__.py in <module>
-      1 # Resolve a cyclic import
-----> 2 import sage.structure.element
-        global sage.structure.element = undefined
+/usr/lib/python3.8/traceback.py in extract_tb(tb=KeyError('/usr/lib/python3.8/site-packages/sage/misc/prandom.py'), limit=None)
+     57     return extract_tb(tb, limit=limit).format()
+     58 
+     59 def extract_tb(tb, limit=None):
+     60     """
+     61     Return a StackSummary object representing a list of
+     62     pre-processed entries from traceback.
+     63 
+     64     This is useful for alternate formatting of stack traces.  If
+     65     'limit' is omitted or None, all entries are extracted.  A
+     66     pre-processed stack trace entry is a FrameSummary object
+     67     containing attributes filename, lineno, name, and line
+     68     representing the information that is usually printed for a stack
+     69     trace.  The line is a string with leading and trailing
+     70     whitespace stripped; if the source is not available it is None.
+     71     """
+---> 72     return StackSummary.extract(walk_tb(tb), limit=limit)
+        global StackSummary.extract = <bound method StackSummary.extract of <class 'traceback.StackSummary'>>
+        global walk_tb = <function walk_tb at 0x7f705a2b48b0>
+        tb = KeyError('/usr/lib/python3.8/site-packages/sage/misc/prandom.py')
+        limit = None
+     73 
+     74 #
+     75 # Exception formatting and output.
+     76 #
+     77 
+     78 _cause_message = (
+     79     "\nThe above exception was the direct cause "
+     80     "of the following exception:\n\n")
+     81 
+     82 _context_message = (
+     83     "\nDuring handling of the above exception, "
+     84     "another exception occurred:\n\n")
+     85 
+     86 
+     87 def print_exception(etype, value, tb, limit=None, file=None, chain=True):
 
-/usr/lib/python3.8/site-packages/sage/structure/parent.pxd in init sage.structure.element (build/cythonized/sage/structure/element.c:34169)()
-      1 #*****************************************************************************
-      2 # This program is free software: you can redistribute it and/or modify
-      3 # it under the terms of the GNU General Public License as published by
-      4 # the Free Software Foundation, either version 2 of the License, or
-      5 # (at your option) any later version.
-      6 #                  http://www.gnu.org/licenses/
-      7 #*****************************************************************************
-      8 
-      9 cimport sage.structure.category_object
-     10 from sage.structure.coerce_dict cimport MonoDict, TripleDict
-     11 
----> 12 cdef class Parent(sage.structure.category_object.CategoryObject):
-        global cdef = undefined
-        global Parent = undefined
-        global sage.structure.category_object.CategoryObject = undefined
-     13     cdef _element_constructor
-     14     cdef bint _element_init_pass_parent
-     15     cdef public _convert_method_name
-     16     cdef public _initial_coerce_list
-     17     cdef public _initial_action_list
-     18     cdef public _initial_convert_list
-     19     cdef readonly bint _coercions_used
-     20 
-     21     # Flags, see below
-     22     cdef int flags
-     23     cdef inline bint get_flag(self, int flag):
-     24         return self.flags & flag
-     25 
-     26     cpdef register_coercion(self, mor)
-     27     cpdef register_action(self, action)
-     28     cpdef register_conversion(self, mor)
-     29     cpdef register_embedding(self, embedding)
-     30 
-     31     cpdef bint is_exact(self) except -2
+/usr/lib/python3.8/traceback.py in extract(klass=<class 'traceback.StackSummary'>, frame_gen=<generator object walk_tb>, limit=None, lookup_lines=True, capture_locals=False)
+    332         :param capture_locals: If True, the local variables from each frame will
+    333             be captured as object representations into the FrameSummary.
+    334         """
+    335         if limit is None:
+    336             limit = getattr(sys, 'tracebacklimit', None)
+    337             if limit is not None and limit < 0:
+    338                 limit = 0
+    339         if limit is not None:
+    340             if limit >= 0:
+    341                 frame_gen = itertools.islice(frame_gen, limit)
+    342             else:
+    343                 frame_gen = collections.deque(frame_gen, maxlen=-limit)
+    344 
+    345         result = klass()
+    346         fnames = set()
+--> 347         for f, lineno in frame_gen:
+        f = undefined
+        lineno = undefined
+        frame_gen = <generator object walk_tb at 0x7f6f09e29740>
+    348             co = f.f_code
+    349             filename = co.co_filename
+    350             name = co.co_name
+    351 
+    352             fnames.add(filename)
+    353             linecache.lazycache(filename, f.f_globals)
+    354             # Must defer line lookups until we have called checkcache.
+    355             if capture_locals:
+    356                 f_locals = f.f_locals
+    357             else:
+    358                 f_locals = None
+    359             result.append(FrameSummary(
+    360                 filename, lineno, name, lookup_line=False, locals=f_locals))
+    361         for filename in fnames:
+    362             linecache.checkcache(filename)
 
-/usr/lib/python3.8/site-packages/sage/structure/coerce.pxd in init sage.structure.parent (build/cythonized/sage/structure/parent.c:27572)()
-      1 from .parent cimport Parent
-      2 from .coerce_dict cimport TripleDict
-      3 
-      4 cpdef py_scalar_parent(py_type)
-      5 cpdef py_scalar_to_element(py)
-      6 cpdef bint parent_is_integers(P) except -1
-      7 cpdef bint is_numpy_type(t)
-      8 cpdef bint is_mpmath_type(t)
-      9 
-     10 
----> 11 cdef class CoercionModel:
-        global cdef = undefined
-        global CoercionModel = undefined
-     12     # This MUST be a mapping to tuples, where each
-     13     # tuple contains at least two elements that are either
-     14     # None or of type Morphism.
-     15     cdef readonly TripleDict _coercion_maps
-     16 
-     17     # This MUST be a mapping to actions.
-     18     cdef readonly TripleDict _action_maps
-     19 
-     20     cpdef canonical_coercion(self, x, y)
-     21     cpdef bin_op(self, x, y, op)
-     22     cpdef richcmp(self, x, y, int op)
-     23 
-     24     cpdef coercion_maps(self, R, S)
-     25     cpdef discover_coercion(self, R, S)
-     26     cpdef verify_coercion_maps(self, R, S, homs, bint fix=*)
-     27     cpdef verify_action(self, action, R, S, op, bint fix=*)
-     28 
-     29     cpdef get_action(self, R, S, op=*, r=*, s=*)
-     30     cpdef discover_action(self, R, S, op, r=*, s=*)
-     31 
+/usr/lib/python3.8/traceback.py in walk_tb(tb=KeyError('/usr/lib/python3.8/site-packages/sage/misc/prandom.py'))
+    297     """
+    298     if f is None:
+    299         f = sys._getframe().f_back.f_back
+    300     while f is not None:
+    301         yield f, f.f_lineno
+    302         f = f.f_back
+    303 
+    304 
+    305 def walk_tb(tb):
+    306     """Walk a traceback yielding the frame and line number for each frame.
+    307 
+    308     This will follow tb.tb_next (and thus is in the opposite order to
+    309     walk_stack). Usually used with StackSummary.extract.
+    310     """
+    311     while tb is not None:
+--> 312         yield tb.tb_frame, tb.tb_lineno
+        tb.tb_frame = undefined
+        tb.tb_lineno = undefined
+    313         tb = tb.tb_next
+    314 
+    315 
+    316 _RECURSIVE_CUTOFF = 3 # Also hardcoded in traceback.c.
+    317 
+    318 class StackSummary(list):
+    319     """A stack of frames."""
+    320 
+    321     @classmethod
+    322     def extract(klass, frame_gen, *, limit=None, lookup_lines=True,
+    323             capture_locals=False):
+    324         """Create a StackSummary from a traceback or stack object.
+    325 
+    326         :param frame_gen: A generator that yields (frame, lineno) tuples to
+    327             include in the stack.
 
-gmpy2.pxd in init sage.structure.coerce (build/cythonized/sage/structure/coerce.c:23180)()
-
-TypeError: gmpy2.mpz is not a type object
+AttributeError: 'KeyError' object has no attribute 'tb_frame'
 
 ***************************************************************************
 
-History of session input:
+History of session input:get_ipython().run_line_magic('ls', '')a = Integer(10)from sage.all import *is_prime(Integer(4))
+*** Last line of input (may not be in above history):
+is_prime(4)
