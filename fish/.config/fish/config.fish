@@ -5,6 +5,8 @@ set PATH $PATH /home/v4d3r/.rbenv/bin
 set PATH $PATH "$HOME/.rbenv/plugins/ruby-build/bin"
 set -gx PATH /home/v4d3r/go/bin $PATH
 set -gx PATH /home/v4d3r/.local/bin $PATH
+#set -gx PATH $HOME/dotnet $PATH
+set DOTNET_ROOT $HOME/dotnet
 alias rmf='rm -rf'
 alias r='ranger' 
 alias xcp='xclip -sel clipboard'
@@ -43,3 +45,5 @@ alias f='emacss'
 # uninstall by removing these lines or running `tabtab uninstall electron-forge`
 [ -f /home/v4d3r/.cache/yay/httptoolkit/src/httptoolkit/node_modules/tabtab/.completions/electron-forge.fish ]; and . /home/v4d3r/.cache/yay/httptoolkit/src/httptoolkit/node_modules/tabtab/.completions/electron-forge.fish
 
+# dotnet tools path
+set -gx PATH /home/v4d3r/.dotnet/tools $PATH
