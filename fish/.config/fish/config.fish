@@ -6,12 +6,18 @@ set PATH $PATH "$HOME/.rbenv/plugins/ruby-build/bin"
 set -gx PATH /home/v4d3r/go/bin $PATH
 set -gx PATH /home/v4d3r/.local/bin $PATH
 #set -gx PATH $HOME/dotnet $PATH
+set -gx PATH /home/v4d3r/.emacs.d/bin $PATH
+
 set DOTNET_ROOT $HOME/dotnet
 alias rmf='rm -rf'
 alias r='ranger' 
 alias xcp='xclip -sel clipboard'
+
+# set emacs full screen
+alias emacs='emacs -fs'
 # set greenbitch removal
 set LS_COLORS "tw=30;40:ow=38;40"
+
 
 bind \cf accept-autosuggestion
 #bind \cy accept-autosuggestion execute
